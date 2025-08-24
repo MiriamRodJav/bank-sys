@@ -2,6 +2,10 @@ package com.nttdata.bank.model;
 
 import lombok.*;
 
+/**
+ * Represents a bank account that belongs to a client.
+ * Each account has an identifier, number, balance, and type.
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -11,17 +15,24 @@ import lombok.*;
 @Builder
 public class BankAccountModel {
 
-    public Long accountId;
+    /** Unique identifier of the account. */
+    private Long accountId;
 
-    public String accountNumber;
+    /** Account number used for operations. */
+    private String accountNumber;
 
-    public double balance = 0.0;
+    /** Current balance of the account. */
+    private double balance = 0.0;
 
-    public AccountType accountType;
+    /** Type of account: savings or checking. */
+    private AccountType accountType;
 
-    // AHORROS o CORRIENTE
+    /**
+     * Enumeration of possible account types.
+     * SAVINGS: Savings account/Cuenta de ahorros
+     * CHECKING: Checking account/Cuenta corriente.
+     */
     public enum AccountType {
         SAVINGS, CHECKING
     }
-
 }

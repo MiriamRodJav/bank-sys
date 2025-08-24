@@ -2,6 +2,11 @@ package com.nttdata.bank.model;
 
 import lombok.*;
 
+/**
+ * Represents a client of the bank.
+ * Contains basic personal information such as name,
+ * identification number, and contact details.
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -11,14 +16,18 @@ import lombok.*;
 @Builder
 public class ClientModel {
 
-    public Long id;
+    /** Unique identifier of the client. */
+    private Long id;
 
-    public String firstName;
+    /** Client's first name. */
+    private String firstName;
 
-    public String lastName;
+    /** Client's last name. */
+    private String lastName;
 
-    public String dni;
+    /** Client's national identity document (DNI). */
+    private String dni;
 
-    public String email;
-
+    /** Client's email address. */
+    private String email;
 }
