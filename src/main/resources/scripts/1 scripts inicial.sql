@@ -1,28 +1,23 @@
 -- ======================================
 -- TABLE CLIENT
 -- ======================================
-CREATE TABLE Client (
-    clientId INT AUTO_INCREMENT PRIMARY KEY,
-    firstName VARCHAR(100) NOT NULL,
-    lastName VARCHAR(100) NOT NULL,
-    dni VARCHAR(20) NOT NULL UNIQUE,
-    email VARCHAR(150) NOT NULL,
-    CONSTRAINT chk_email CHECK (email LIKE '_%@_%._%')
+CREATE TABLE clients (
+    dni VARCHAR(8) PRIMARY KEY,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- ======================================
 -- TABLE BANK ACCOUNT
 -- ======================================
-CREATE TABLE BankAccount (
-    accountId INT AUTO_INCREMENT PRIMARY KEY,
-    accountNumber VARCHAR(30) NOT NULL UNIQUE,
-    balance DOUBLE DEFAULT 0.0,
-    accountType ENUM('SAVINGS', 'CHECKING') NOT NULL,
-    clientId INT NOT NULL,
-    FOREIGN KEY (clientId) REFERENCES Client(clientId),
-    CONSTRAINT chk_balance CHECK (
-        (accountType = 'SAVINGS' AND balance >= 0.0)
-        OR
-        (accountType = 'CHECKING' AND balance >= -500.0)
-    )
+CREATE TABLE bank_accounts (
+    account_number VARCHAR(30) PRIMARY KEY,
+    balance DECIMAL(15,2) DEFAULT 0.00 CHECK (balance >= -500.00),
+    account_type ENUM('SAVINGS', 'CURRENT') NOT NULL,
+    client_dni VARCHAR(8) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (client_dni) REFERENCES clients(dni) ON DELETE CASCADE,
+    INDEX idx_client_dni (client_dni)
 );
