@@ -27,6 +27,9 @@ public class BankAccountModel {
     /** Type of account: savings or checking. */
     private AccountType accountType;
 
+    /** Unique identifier of the client. */
+    private Long clientId;
+
     /**
      * Enumeration of possible account types.
      * SAVINGS: Savings account/Cuenta de ahorros

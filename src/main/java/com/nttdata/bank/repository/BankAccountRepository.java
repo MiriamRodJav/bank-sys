@@ -9,14 +9,14 @@ import java.util.List;
 
 public class BankAccountRepository {
 
-    public void save(BankAccountModel account, Long clientId) throws SQLException {
+    public BankAccountModel save(BankAccountModel account) throws SQLException {
         String sql = "INSERT INTO BankAccount(accountNumber, balance, accountType, clientId) VALUES (?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, account.getAccountNumber());
             stmt.setDouble(2, account.getBalance());
             stmt.setString(3, account.getAccountType().name());
-            stmt.setLong(4, clientId);
+            stmt.setLong(4, account.getClientId());
             stmt.executeUpdate();
 
             ResultSet rs = stmt.getGeneratedKeys();
@@ -24,6 +24,7 @@ public class BankAccountRepository {
                 account.setAccountId(rs.getLong(1));
             }
         }
+        return account;
     }
 
     public BankAccountModel findByAccountNumber(String accountNumber) throws SQLException {
@@ -37,7 +38,8 @@ public class BankAccountRepository {
                         rs.getLong("accountId"),
                         rs.getString("accountNumber"),
                         rs.getDouble("balance"),
-                        BankAccountModel.AccountType.valueOf(rs.getString("accountType"))
+                        BankAccountModel.AccountType.valueOf(rs.getString("accountType")),
+                        rs.getLong("clientId")
                 );
             }
         }
@@ -56,7 +58,8 @@ public class BankAccountRepository {
                         rs.getLong("accountId"),
                         rs.getString("accountNumber"),
                         rs.getDouble("balance"),
-                        BankAccountModel.AccountType.valueOf(rs.getString("accountType"))
+                        BankAccountModel.AccountType.valueOf(rs.getString("accountType")),
+                        rs.getLong("clientId")
                 ));
             }
         }

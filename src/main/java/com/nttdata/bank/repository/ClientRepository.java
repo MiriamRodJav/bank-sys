@@ -21,7 +21,7 @@ public class ClientRepository {
 
             ResultSet rs = stmt.getGeneratedKeys();
             if (rs.next()) {
-                client.setId(rs.getLong(1));
+                client.setClientId(rs.getLong(1));
             }
         }
         return client;
@@ -32,6 +32,25 @@ public class ClientRepository {
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, dni);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return new ClientModel(
+                        rs.getLong("clientId"),
+                        rs.getString("firstName"),
+                        rs.getString("lastName"),
+                        rs.getString("dni"),
+                        rs.getString("email")
+                );
+            }
+        }
+        return null;
+    }
+
+    public ClientModel findById(Long clientId) throws SQLException {
+        String sql = "SELECT * FROM Client WHERE clientId = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setLong(1, clientId);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 return new ClientModel(

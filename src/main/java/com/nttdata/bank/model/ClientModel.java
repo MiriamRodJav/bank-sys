@@ -17,7 +17,7 @@ import lombok.*;
 public class ClientModel {
 
     /** Unique identifier of the client. */
-    private Long id;
+    private Long clientId;
 
     /** Client's first name. */
     private String firstName;
