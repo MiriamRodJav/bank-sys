@@ -42,6 +42,8 @@ public class BankAccountService {
             accountNumber = UUID.randomUUID().toString().substring(0, 10);
         } while (repositoryBankAccount.findByAccountNumber(accountNumber) != null);
 
+        bankAccount.setAccountNumber(accountNumber);
+
         if (bankAccount.getAccountType() != BankAccountModel.AccountType.SAVINGS
                 && bankAccount.getAccountType() != BankAccountModel.AccountType.CHECKING) {
             throw new Exception("Account type must be SAVINGS or CHECKING");
