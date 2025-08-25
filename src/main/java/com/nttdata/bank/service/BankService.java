@@ -2,9 +2,11 @@ package com.nttdata.bank.service;
 
 import com.nttdata.bank.model.BankAccountModel;
 import com.nttdata.bank.repository.BankAccountRepository;
+import com.nttdata.bank.repository.ClientRepository;
 
 public class BankAccountService {
-    private final BankAccountRepository repository = new BankAccountRepository();
+    private ClientRepository clientRepository;
+    private BankAccountRepository bankAccountRepository;
 
     public void deposit(BankAccountModel account, double amount) throws Exception {
         if (amount <= 0) throw new Exception("Deposit amount must be positive");
