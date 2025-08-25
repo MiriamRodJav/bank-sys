@@ -4,14 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1d4789fa-77a6-4650-ae70-fbd5a5b6a70c" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nttdata/bank/repository/BankAccountRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nttdata/bank/repository/BankAccountRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nttdata/bank/repository/BankAccountRepositoryImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nttdata/bank/repository/BankAccountRepositoryImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nttdata/bank/repository/ClientRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nttdata/bank/repository/ClientRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nttdata/bank/repository/ClientRepositoryImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nttdata/bank/repository/ClientRepositoryImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nttdata/bank/service/BankService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nttdata/bank/service/BankService.java" afterDir="false" />
-    </list>
+    <list default="true" id="1d4789fa-77a6-4650-ae70-fbd5a5b6a70c" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -51,6 +44,13 @@
 }]]></component>
   <component name="RunManager">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="ALTERNATIVE_JRE_PATH" value="11" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <envs>
+        <env name="DB_URL" value="jdbc:mysql://localhost:3306/banking_system?useSSL=false&amp;serverTimezone=UTC" />
+        <env name="DB_USER" value="root" />
+        <env name="DB_PASSWORD" value="0tR7k8HlsUzb" />
+      </envs>
       <option name="MAIN_CLASS_NAME" value="com.nttdata.bank.Main" />
       <module name="bank-sys" />
       <extension name="coverage">
