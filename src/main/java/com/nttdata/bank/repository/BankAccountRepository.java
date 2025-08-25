@@ -2,13 +2,21 @@ package com.nttdata.bank.repository;
 
 import com.nttdata.bank.model.BankAccountModel;
 import com.nttdata.bank.util.DatabaseConnection;
-
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
+/**
+ * Repository class for managing persistence operations of BankAccountModel.
+ * Provides methods to save, find and update bank accounts in the database.
+ */
 public class BankAccountRepository {
 
+    /**
+     * Saves a new bank account into the database.
+     *
+     * @param account the BankAccountModel to be saved
+     * @return the saved account with the generated accountId
+     * @throws SQLException if any SQL error occurs during the insert
+     */
     public BankAccountModel save(BankAccountModel account) throws SQLException {
         String sql = "INSERT INTO BankAccount(accountNumber, balance, accountType, clientId) VALUES (?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -27,6 +35,13 @@ public class BankAccountRepository {
         return account;
     }
 
+    /**
+     * Finds a bank account by its account number.
+     *
+     * @param accountNumber the unique account number to search
+     * @return the BankAccountModel if found, or null if not found
+     * @throws SQLException if any SQL error occurs during the query
+     */
     public BankAccountModel findByAccountNumber(String accountNumber) throws SQLException {
         String sql = "SELECT * FROM BankAccount WHERE accountNumber = ?";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -46,26 +61,13 @@ public class BankAccountRepository {
         return null;
     }
 
-    public List<BankAccountModel> findByClientId(Long clientId) throws SQLException {
-        List<BankAccountModel> accounts = new ArrayList<>();
-        String sql = "SELECT * FROM BankAccount WHERE clientId = ?";
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setLong(1, clientId);
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                accounts.add(new BankAccountModel(
-                        rs.getLong("accountId"),
-                        rs.getString("accountNumber"),
-                        rs.getDouble("balance"),
-                        BankAccountModel.AccountType.valueOf(rs.getString("accountType")),
-                        rs.getLong("clientId")
-                ));
-            }
-        }
-        return accounts;
-    }
-
+    /**
+     * Updates the balance of a specific account.
+     *
+     * @param accountId  the unique identifier of the account to update
+     * @param newBalance the new balance value to be set
+     * @throws SQLException if any SQL error occurs during the update
+     */
     public void updateBalance(Long accountId, double newBalance) throws SQLException {
         String sql = "UPDATE BankAccount SET balance = ? WHERE accountId = ?";
         try (Connection conn = DatabaseConnection.getConnection();

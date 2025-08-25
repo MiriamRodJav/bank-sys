@@ -59,4 +59,80 @@ public class BankAccountService {
 
     }
 
+    /**
+     * Deposits an amount into a bank account identified by account number.
+     *
+     * @param accountNumber the account number where the deposit will be made
+     * @param amount the amount to deposit
+     * @return the updated bank account
+     * @throws Exception if the account does not exist or amount is invalid
+     */
+    public BankAccountModel deposit(String accountNumber, double amount) throws Exception {
+
+        if (amount <= 0) {
+            throw new Exception("Deposit amount must be greater than zero");
+        }
+
+        BankAccountModel account = repositoryBankAccount.findByAccountNumber(accountNumber);
+        if (account == null) {
+            throw new Exception("Account not found");
+        }
+
+        double newBalance = account.getBalance() + amount;
+        repositoryBankAccount.updateBalance(account.getAccountId(), newBalance);
+
+        account.setBalance(newBalance);
+        return account;
+    }
+
+    /**
+     * Withdraws money from a bank account
+     *
+     * @param accountNumber the account number where the withdrawal will be made
+     * @param amount the amount to withdraw
+     * @return the updated bank account
+     * @throws Exception if account does not exist, amount is invalid, or rules are violated
+     */
+    public BankAccountModel withdraw(String accountNumber, double amount) throws Exception {
+
+        if (amount <= 0) {
+            throw new Exception("Withdrawal amount must be greater than zero");
+        }
+
+        BankAccountModel account = repositoryBankAccount.findByAccountNumber(accountNumber);
+        if (account == null) {
+            throw new Exception("Account not found");
+        }
+
+        double newBalance = account.getBalance() - amount;
+
+        if (account.getAccountType() == BankAccountModel.AccountType.SAVINGS && newBalance < 0) {
+            throw new Exception("Savings accounts cannot have a negative balance");
+        }
+
+        if (account.getAccountType() == BankAccountModel.AccountType.CHECKING && newBalance < -500.00) {
+            throw new Exception("Checking accounts cannot go below -500.00");
+        }
+
+        repositoryBankAccount.updateBalance(account.getAccountId(), newBalance);
+
+        account.setBalance(newBalance);
+        return account;
+    }
+
+    /**
+     * Retrieves the current balance of a bank account by its account number.
+     *
+     * @param accountNumber the account number to consult
+     * @return the balance of the account
+     * @throws Exception if the account does not exist
+     */
+    public double checkBalance(String accountNumber) throws Exception {
+        BankAccountModel account = repositoryBankAccount.findByAccountNumber(accountNumber);
+        if (account == null) {
+            throw new Exception("Account not found");
+        }
+        return account.getBalance();
+    }
+
 }
