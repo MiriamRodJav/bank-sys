@@ -1,2 +1,5 @@
-package com.nttdata.bank.model;public enum AccountType {
+package com.nttdata.bank.model;
+public enum AccountType {
+    SAVINGS,
+    CURRENT
 }

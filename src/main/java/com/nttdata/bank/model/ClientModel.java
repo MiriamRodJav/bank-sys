@@ -2,23 +2,34 @@ package com.nttdata.bank.model;
 
 import lombok.*;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
-@EqualsAndHashCode
-@Builder
+import java.util.regex.Pattern;
+
+@Data
 public class ClientModel {
 
-    public Long id;
+    private String dni;
+    private String firstName;
+    private String lastName;
+    private String email;
 
-    public String firstName;
+    private static final Pattern EMAIL_PATTERN =
+            Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
 
-    public String lastName;
+    public ClientModel(String dni , String lastName, String firstName, String email) {
+        this.dni = dni;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+    }
+    public ClientModel() {
 
-    public String dni;
+    }
+    public boolean validateEmail() {
+        return EMAIL_PATTERN.matcher(email).matches();
+    }
 
-    public String email;
-
+    public boolean validateDni() {
+        return dni != null && !dni.trim().isEmpty() && dni.length() >= 8;
+    }
 }
+
