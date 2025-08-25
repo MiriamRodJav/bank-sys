@@ -7,8 +7,7 @@
     <list default="true" id="1d4789fa-77a6-4650-ae70-fbd5a5b6a70c" name="Changes" comment="[Girl Power] Avance de proyecto">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/nttdata/bank/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nttdata/bank/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nttdata/bank/util/DatabaseConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nttdata/bank/util/DatabaseConnection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/scripts/1 scripts inicial.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/scripts/1 scripts inicial.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nttdata/bank/service/BankAccountService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nttdata/bank/service/BankAccountService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,7 +47,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "Application.Main.executor": "Run",
+    "Application.Main.executor": "Debug",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
@@ -59,6 +58,26 @@
     "settings.editor.selected.configurable": "preferences.pluginManager"
   }
 }]]></component>
+  <component name="RunManager">
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.nttdata.bank.Main" />
+      <module name="bank-sys" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.nttdata.bank.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Main" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="1d4789fa-77a6-4650-ae70-fbd5a5b6a70c" name="Changes" comment="" />
@@ -115,7 +134,15 @@
       <option name="project" value="LOCAL" />
       <updated>1756156431929</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="[Girl Power] Avance de proyecto">
+      <option name="closed" value="true" />
+      <created>1756158096934</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1756158096934</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

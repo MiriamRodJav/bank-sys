@@ -6,7 +6,9 @@ import com.nttdata.bank.service.BankAccountService;
 import com.nttdata.bank.service.ClientService;
 
 public class Main {
+
     public static void main(String[] args) {
+
         try {
 
             // Crear servicios
@@ -15,10 +17,10 @@ public class Main {
 
             // 1. Registrar un cliente
             ClientModel client = new ClientModel();
-            client.setFirstName("Lourdes");
+            client.setFirstName("Jake");
             client.setLastName("Cabanillas");
-            client.setDni("12345678");
-            client.setEmail("lourdes@mail.com");
+            client.setDni("11111111");
+            client.setEmail("jake@mail.com");
 
             ClientModel savedClient = clientService.registerClient(client);
             System.out.println("Cliente registrado: " + savedClient.getFirstName() + " " + savedClient.getLastName());

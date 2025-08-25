@@ -5,6 +5,7 @@ import com.nttdata.bank.model.ClientModel;
 import com.nttdata.bank.repository.BankAccountRepository;
 import com.nttdata.bank.repository.ClientRepository;
 
+import java.util.Random;
 import java.util.UUID;
 
 /**
@@ -39,7 +40,9 @@ public class BankAccountService {
 
         String accountNumber;
         do {
-            accountNumber = UUID.randomUUID().toString().substring(0, 10);
+            Random random = new Random();
+            long number = 1000000000L + (long)(random.nextDouble() * 9999999999L);
+            accountNumber =  String.valueOf(number);
         } while (repositoryBankAccount.findByAccountNumber(accountNumber) != null);
 
         bankAccount.setAccountNumber(accountNumber);
