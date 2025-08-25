@@ -9,7 +9,7 @@ import java.util.List;
 
 public class ClientRepository {
 
-    public void save(ClientModel client) throws SQLException {
+    public ClientModel save(ClientModel client) throws SQLException {
         String sql = "INSERT INTO Client(firstName, lastName, dni, email) VALUES (?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -24,6 +24,7 @@ public class ClientRepository {
                 client.setId(rs.getLong(1));
             }
         }
+        return client;
     }
 
     public ClientModel findByDni(String dni) throws SQLException {
