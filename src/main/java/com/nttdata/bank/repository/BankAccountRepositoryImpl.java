@@ -5,6 +5,7 @@ import com.nttdata.bank.model.BankAccountModel;
 import com.nttdata.bank.util.DatabaseConnection;
 
 import java.sql.*;
+import java.util.Optional;
 
 
 public class BankAccountRepositoryImpl implements BankAccountRepository{
@@ -32,8 +33,6 @@ public class BankAccountRepositoryImpl implements BankAccountRepository{
         return null;
     }
 
-
-
     @Override
     public boolean updateBalance(String accountNumber, double newBalance) {
         String sql = "UPDATE bank_accounts SET balance = ? WHERE account_number = ?";
@@ -52,6 +51,37 @@ public class BankAccountRepositoryImpl implements BankAccountRepository{
             DatabaseConnection.closeConnection(conn);
         }
         return false;
+    }
+
+    @Override
+    public Optional<BankAccountModel> findByAccountNumber(String accountNumber) {
+        String sql = "SELECT * FROM bank_accounts WHERE account_number = ?";
+        Connection conn = null;
+        try  {
+            conn = DatabaseConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, accountNumber);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return Optional.of(mapResultSetToBankAccount(rs));
+            }
+        } catch (SQLException e) {
+            System.err.println("Error finding account by number: " + e.getMessage());
+        }finally {
+            DatabaseConnection.closeConnection(conn);
+        }
+        return Optional.empty();
+    }
+
+    private BankAccountModel mapResultSetToBankAccount(ResultSet rs) throws SQLException {
+        BankAccountModel account = new BankAccountModel(
+                rs.getString("account_number"),
+                AccountType.valueOf(rs.getString("account_type"))
+        );
+        account.setBalance(rs.getDouble("balance"));
+
+        return account;
     }
 
 
