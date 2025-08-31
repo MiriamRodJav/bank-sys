@@ -1,0 +1,171 @@
+openapi: 3.0.3
+info: { title: Account API, version: 1.0.0 }
+servers: [{ url: http://localhost:8082/account-ms }]
+paths:
+  /v1/cuentas:
+    post:
+      operationId: createCuenta
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/CuentaCreate" }
+      responses:
+        "201":
+          {
+            description: Created,
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Cuenta" } },
+              },
+          }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "404": { $ref: "#/components/responses/NotFound" } # cliente inexistente
+    get:
+      operationId: listCuentas
+      parameters:
+        - in: query
+          name: clienteId
+          required: false
+          schema: { type: string, format: uuid }
+      responses:
+        "200":
+          {
+            description: OK,
+            content:
+              {
+                application/json:
+                  {
+                    schema:
+                      {
+                        type: array,
+                        items: { $ref: "#/components/schemas/Cuenta" },
+                      },
+                  },
+              },
+          }
+  /v1/cuentas/{id}:
+    parameters:
+      [
+        {
+          name: id,
+          in: path,
+          required: true,
+          schema: { type: string, format: uuid },
+        },
+      ]
+    get:
+      operationId: getCuenta
+      responses:
+        "200":
+          {
+            description: OK,
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Cuenta" } },
+              },
+          }
+        "404": { $ref: "#/components/responses/NotFound" }
+    delete:
+      operationId: deleteCuenta
+      responses:
+        "204": { description: No Content }
+  /v1/cuentas/{cuentaId}/depositar:
+    parameters:
+      [
+        {
+          name: cuentaId,
+          in: path,
+          required: true,
+          schema: { type: string, format: uuid },
+        },
+      ]
+    put:
+      operationId: depositar
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/Movimiento" }
+      responses:
+        "200":
+          {
+            description: OK,
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Cuenta" } },
+              },
+          }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "404": { $ref: "#/components/responses/NotFound" }
+  /v1/cuentas/{cuentaId}/retirar:
+    parameters:
+      [
+        {
+          name: cuentaId,
+          in: path,
+          required: true,
+          schema: { type: string, format: uuid },
+        },
+      ]
+    put:
+      operationId: retirar
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/Movimiento" }
+      responses:
+        "200":
+          {
+            description: OK,
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Cuenta" } },
+              },
+          }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "404": { $ref: "#/components/responses/NotFound" }
+components:
+  schemas:
+    TipoCuenta: { type: string, enum: [AHORROS, CORRIENTE] }
+    Cuenta:
+      type: object
+      required: [id, numeroCuenta, saldo, tipoCuenta, clienteId]
+      properties:
+        id: { type: string, format: uuid }
+        numeroCuenta: { type: string, readOnly: true }
+        saldo: { type: number, format: double }
+        tipoCuenta: { $ref: "#/components/schemas/TipoCuenta" }
+        clienteId: { type: string, format: uuid }
+    CuentaCreate:
+      type: object
+      required: [tipoCuenta, clienteId, saldoInicial]
+      properties:
+        tipoCuenta: { $ref: "#/components/schemas/TipoCuenta" }
+        clienteId: { type: string, format: uuid }
+        saldoInicial: { type: number, format: double, minimum: 0.01 } # “saldo > 0”
+    Movimiento:
+      type: object
+      required: [monto]
+      properties:
+        monto: { type: number, format: double, minimum: 0.01 }
+    Error:
+      type: object
+      required: [code, message]
+      properties:
+        code: { type: string }
+        message: { type: string }
+  responses:
+    BadRequest:
+      description: Bad Request
+      content:
+        { application/json: { schema: { $ref: "#/components/schemas/Error" } } }
+    NotFound:
+      description: Not Found
+      content:
+        { application/json: { schema: { $ref: "#/components/schemas/Error" } } }

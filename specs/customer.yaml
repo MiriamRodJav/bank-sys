@@ -1,0 +1,124 @@
+openapi: 3.0.3
+info: { title: Customer API, version: 1.0.0 }
+servers: [{ url: http://localhost:8081/customer-ms }]
+paths:
+  /v1/clientes:
+    post:
+      operationId: createCliente
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ClienteCreate" }
+      responses:
+        "201":
+          {
+            description: Created,
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Cliente" } },
+              },
+          }
+        "409": { $ref: "#/components/responses/Conflict" } # DNI duplicado
+    get:
+      operationId: listClientes
+      responses:
+        "200":
+          {
+            description: OK,
+            content:
+              {
+                application/json:
+                  {
+                    schema:
+                      {
+                        type: array,
+                        items: { $ref: "#/components/schemas/Cliente" },
+                      },
+                  },
+              },
+          }
+  /v1/clientes/{id}:
+    parameters:
+      [
+        {
+          name: id,
+          in: path,
+          required: true,
+          schema: { type: string, format: uuid },
+        },
+      ]
+    get:
+      operationId: getCliente
+      responses:
+        "200":
+          {
+            description: OK,
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Cliente" } },
+              },
+          }
+        "404": { $ref: "#/components/responses/NotFound" }
+    put:
+      operationId: updateCliente
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ClienteUpdate" }
+      responses:
+        "200":
+          {
+            description: OK,
+            content:
+              {
+                application/json:
+                  { schema: { $ref: "#/components/schemas/Cliente" } },
+              },
+          }
+        "404": { $ref: "#/components/responses/NotFound" }
+    delete:
+      operationId: deleteCliente
+      responses:
+        "204": { description: No Content }
+        "409": { $ref: "#/components/responses/Conflict" } # Tiene cuentas activas
+components:
+  schemas:
+    Cliente:
+      type: object
+      required: [id, nombre, apellido, dni]
+      properties:
+        id: { type: string, format: uuid }
+        nombre: { type: string, minLength: 1 }
+        apellido: { type: string, minLength: 1 }
+        dni: { type: string, pattern: "^[0-9]{8}$" }
+        email: { type: string, format: email }
+    ClienteCreate:
+      allOf: [{ $ref: "#/components/schemas/Cliente" }]
+      required: [nombre, apellido, dni]
+      properties:
+        id: { readOnly: true }
+    ClienteUpdate:
+      type: object
+      properties:
+        nombre: { type: string }
+        apellido: { type: string }
+        email: { type: string, format: email }
+    Error:
+      type: object
+      required: [code, message]
+      properties:
+        code: { type: string }
+        message: { type: string }
+  responses:
+    NotFound:
+      description: Not Found
+      content:
+        { application/json: { schema: { $ref: "#/components/schemas/Error" } } }
+    Conflict:
+      description: Conflict
+      content:
+        { application/json: { schema: { $ref: "#/components/schemas/Error" } } }

@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: account-ms
+  datasource:
+    url: jdbc:mysql://localhost:3306/accounts?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    username: root
+    password: Mancora#1
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate.format_sql: true
+      hibernate.jdbc.time_zone: UTC
+  flyway:
+    enabled: true
+
+server:
+  port: 8082
+  servlet:
+    context-path: /account-ms
+
+customerms:
+  base-url: http://localhost:8081/customer-ms
