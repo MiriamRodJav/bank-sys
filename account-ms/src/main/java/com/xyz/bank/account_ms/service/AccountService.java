@@ -20,4 +20,6 @@ public interface AccountService {
 
     List<AccountModel> getAccountsByCustomerId(Long customerId);
 
+    boolean existsActiveAccountByCustomerId(Long customerId);
+
 }

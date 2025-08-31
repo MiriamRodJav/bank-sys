@@ -36,4 +36,24 @@ public class AccountController {
         return ResponseEntity.noContent().build();
     }
 
+    @PutMapping("/{id}/depositar")
+    public ResponseEntity<AccountModel> deposit(
+            @PathVariable Long id,
+            @RequestParam Double amount) {
+        return ResponseEntity.ok(accountService.deposit(id, amount));
+    }
+
+    @PutMapping("/{id}/retirar")
+    public ResponseEntity<AccountModel> withdraw(
+            @PathVariable Long id,
+            @RequestParam Double amount) {
+        return ResponseEntity.ok(accountService.withdraw(id, amount));
+    }
+
+    @GetMapping("/existsByCustomer/{customerId}")
+    public ResponseEntity<Boolean> existsByCustomer(@PathVariable Long customerId) {
+        boolean exists = accountService.existsActiveAccountByCustomerId(customerId);
+        return ResponseEntity.ok(exists);
+    }
+
 }

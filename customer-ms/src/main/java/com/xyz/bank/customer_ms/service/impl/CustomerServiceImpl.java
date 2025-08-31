@@ -1,6 +1,7 @@
 package com.xyz.bank.customer_ms.service.impl;
 
 import com.xyz.bank.customer_ms.entity.CustomerEntity;
+import com.xyz.bank.customer_ms.feing.AccountClient;
 import com.xyz.bank.customer_ms.mapper.CustomerMapper;
 import com.xyz.bank.customer_ms.model.CustomerModel;
 import com.xyz.bank.customer_ms.repository.CustomerRepository;
@@ -18,6 +19,9 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
     private CustomerMapper customerMapper;
+
+    @Autowired
+    private AccountClient accountClient;
 
     @Override
     public CustomerModel createCustomer(CustomerModel customer) {
@@ -57,6 +61,11 @@ public class CustomerServiceImpl implements CustomerService {
     public void deleteCustomer(Long id) {
         CustomerEntity entity = customerRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Customer not found."));
+        Boolean hasAccounts = accountClient.existsByCustomer(id);
+        if (Boolean.TRUE.equals(hasAccounts)) {
+            throw new RuntimeException("No se puede eliminar cliente con cuentas activas");
+        }
+
         customerRepository.delete(entity);
     }
 

@@ -26,8 +26,8 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public AccountModel createAccount(AccountModel account) {
         account.setAccountNumber(UUID.randomUUID().toString());
-        if (account.getBalance() < 0) {
-            throw new IllegalArgumentException("Initial balance must be greater or equal to 0");
+        if (account.getBalance() <= 0) {
+            throw new IllegalArgumentException("Initial balance must be greater than 0");
         }
         AccountEntity entity = accountMapper.toEntity(account);
         AccountEntity saved = accountRepository.save(entity);
@@ -95,6 +95,11 @@ public class AccountServiceImpl implements AccountService {
                 .stream()
                 .map(accountMapper::toModel)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean existsActiveAccountByCustomerId(Long customerId) {
+        return accountRepository.existsByCustomerIdAndActiveTrue(customerId);
     }
 
 }
