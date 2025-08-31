@@ -33,6 +33,10 @@ Parte del **Bootcamp Tech Girls Power - Proyecto II**.
 ---
 
 ## 📂 Estructura del Proyecto
+## Account-MS
+
+![ACCOUNT_API](./images/AccountAPI.png)
+
 ```bash
 bank-sys/account-ms
 │── src/
@@ -48,7 +52,13 @@ bank-sys/account-ms
 │   │    ├── account-api-yaml (Contrato)
 │── pom.xml
 │── README.md
+```
 
+## Customer-MS
+
+![CUSTOMER_API](./images/CustomerAPI.png)
+
+```bash
 bank-sys/customer-ms
 │── src/
 │   ├── main/java/com/xyz/bank/customer_ms
