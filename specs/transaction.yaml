@@ -1,0 +1,146 @@
+openapi: 3.0.3
+info: { title: Transaction API, version: 1.0.0 }
+servers: [{ url: http://localhost:8083/transaction-ms }]
+paths:
+  /v1/transactions/deposit:
+    post:
+      operationId: createDeposit
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/DepositRequest" }
+      responses:
+        "201":
+          {
+            description: Created,
+            content:
+              { application/json: { schema: { $ref: "#/components/schemas/Transaction" } } },
+          }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "422": { $ref: "#/components/responses/UnprocessableEntity" }
+
+  /v1/transactions/withdraw:
+    post:
+      operationId: createWithdraw
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/WithdrawRequest" }
+      responses:
+        "201":
+          {
+            description: Created,
+            content:
+              { application/json: { schema: { $ref: "#/components/schemas/Transaction" } } },
+          }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "422": { $ref: "#/components/responses/UnprocessableEntity" }
+
+  /v1/transactions/transfer:
+    post:
+      operationId: createTransfer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/TransferRequest" }
+      responses:
+        "201":
+          {
+            description: Created,
+            content:
+              { application/json: { schema: { $ref: "#/components/schemas/Transaction" } } },
+          }
+        "404": { $ref: "#/components/responses/NotFound" }   # source/destination account not found
+        "422": { $ref: "#/components/responses/UnprocessableEntity" }   # insufficient funds / invalid amount
+
+  /v1/transactions/history:
+    get:
+      operationId: listTransactions
+      parameters:
+        - { name: accountId, in: query, required: true, schema: { type: string, format: uuid } }
+        - { name: fromDate,  in: query, required: false, schema: { type: string, format: date-time } }
+        - { name: toDate,    in: query, required: false, schema: { type: string, format: date-time } }
+        - { name: type,      in: query, required: false, schema: { $ref: "#/components/schemas/TransactionType" } }
+      responses:
+        "200":
+          {
+            description: OK,
+            content:
+              {
+                application/json:
+                  {
+                    schema:
+                      {
+                        type: array,
+                        items: { $ref: "#/components/schemas/Transaction" },
+                      },
+                  },
+              },
+          }
+        "404": { $ref: "#/components/responses/NotFound" }
+
+components:
+  schemas:
+    TransactionType: { type: string, enum: [DEPOSIT, WITHDRAW, TRANSFER] }
+
+    Transaction:
+      type: object
+      required: [id, type, amount, date, sourceAccountId]
+      properties:
+        id:                { type: string }                 # Mongo ObjectId as string
+        type:              { $ref: "#/components/schemas/TransactionType" }
+        amount:            { type: number, format: double, minimum: 0.01 }
+        date:              { type: string, format: date-time }
+        sourceAccountId:   { type: string, format: uuid }
+        destinationAccountId: { type: string, format: uuid, nullable: true }
+        customerId:        { type: string, format: uuid, nullable: true }
+        postBalance:       { type: number, format: double, description: "Balance after applying transaction" }
+        metadata:          { type: object, additionalProperties: true }
+
+    DepositRequest:
+      type: object
+      required: [accountId, amount]
+      properties:
+        accountId: { type: string, format: uuid }
+        amount:    { type: number, format: double, minimum: 0.01 }
+
+    WithdrawRequest:
+      type: object
+      required: [accountId, amount]
+      properties:
+        accountId: { type: string, format: uuid }
+        amount:    { type: number, format: double, minimum: 0.01 }
+
+
+    TransferRequest:
+      type: object
+      required: [sourceAccountId, destinationAccountId, amount]
+      properties:
+        sourceAccountId:      { type: string, format: uuid }
+        destinationAccountId: { type: string, format: uuid }
+        amount:               { type: number, format: double, minimum: 0.01 }
+        date:                 { type: string, format: date-time, nullable: true }
+        customerId:           { type: string, format: uuid, nullable: true }
+
+    Error:
+      type: object
+      required: [code, message]
+      properties:
+        code:    { type: string }
+        message: { type: string }
+
+  responses:
+    NotFound:
+      description: Not Found
+      content: { application/json: { schema: { $ref: "#/components/schemas/Error" } } }
+    UnprocessableEntity:
+      description: Business rule violation (e.g., insufficient funds or invalid amount)
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+          examples:
+            insufficientFunds: { value: { code: "INSUFFICIENT_FUNDS", message: "Insufficient funds" } }
+            invalidAmount:     { value: { code: "INVALID_AMOUNT", message: "Amount must be greater than 0.01" } }
