@@ -94,6 +94,17 @@
 			<version>4.0.1</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-webflux-ui</artifactId>
+			<version>1.7.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>runtime</scope>
+			<optional>true</optional>
+		</dependency>
 
 	</dependencies>
 
@@ -143,9 +154,10 @@
 
 							<generatorName>spring</generatorName>
 							<output>${project.build.directory}/generated-sources/openapi</output>
-							<apiPackage>com.account.account_ms.controller</apiPackage>
-							<modelPackage>com.account.account_ms.model</modelPackage>
-
+							<apiPackage>com.transaction_ms.transaction_ms.controller</apiPackage>
+							<modelPackage>com.transaction_ms.transaction_ms.model</modelPackage>
+							<generateApiTests>false</generateApiTests>
+							<generateModelTests>false</generateModelTests>
 							<configOptions>
 								<!--								<interfaceOnly>true</interfaceOnly>-->
 								<!--								no controller-->
@@ -159,17 +171,17 @@
 								<useTags>true</useTags>
 								<generateApis>true</generateApis>
 								<generateApiImplementation>false</generateApiImplementation>
-								<generateControllers>false</generateControllers>
+								<generateControllers>true</generateControllers>
 								<generateModels>true</generateModels>
 
 								<useSpringController>true</useSpringController>
 								<useResponseEntity>true</useResponseEntity>
+								<reactive>true</reactive>
 								<useBeanValidation>true</useBeanValidation>
 								<performBeanValidation>true</performBeanValidation>
 
 								<generateSupportingFiles>true</generateSupportingFiles>
-								<generateApiTests>false</generateApiTests>
-								<generateModelTests>false</generateModelTests>
+
 								<generateApiDocumentation>true</generateApiDocumentation>
 								<generateModelDocumentation>true</generateModelDocumentation>
 
