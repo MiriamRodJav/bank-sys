@@ -1,0 +1,317 @@
+openapi: 3.0.1
+info:
+  title: Account Microservice API
+  version: 1.0.0
+servers:
+  - url: http://localhost:8081
+tags:
+  - name: Cuentas
+    description: Operaciones relacionadas con cuentas bancarias
+paths:
+  /cuentas:
+    post:
+      tags:
+        - Cuentas
+      summary: Crear una cuenta para un cliente
+      description: 'Crea una cuenta bancaria (de ahorros o corriente) para un cliente existente.'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CuentaRequest'
+      responses:
+        '201':
+          description: Cuenta creada correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CuentaResponse'
+        '400':
+          description: 'Error de validación (datos inválidos: saldo inicial menor o igual a 0, tipo de cuenta no válido, etc.)'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Cliente no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    get:
+      tags:
+        - Cuentas
+      summary: Listar todas las cuentas bancarias
+      responses:
+        '200':
+          description: Lista de cuentas bancarias
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CuentaResponse'
+        '404':
+          description: No se encontraron cuentas
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /cuentas/{id}:
+    get:
+      tags:
+        - Cuentas
+      summary: Obtener detalles de una cuenta por su ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Detalles de la cuenta
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CuentaResponse'
+        '404':
+          description: Cuenta no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags:
+        - Cuentas
+      summary: Eliminar una cuenta bancaria
+      description: 'Elimina una cuenta por su ID. Solo se puede eliminar si el saldo es 0.0.'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Cuenta eliminada correctamente (Sin Contenido)
+        '404':
+          description: Cuenta no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Conflicto (El saldo no es 0.0)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /cuentas/{cuentaId}/depositar:
+    put:
+      tags:
+        - Cuentas
+      summary: Realizar un depósito en una cuenta bancaria
+      parameters:
+        - name: cuentaId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                monto:
+                  type: number
+                  format: double
+                  description: Monto a depositar.
+      responses:
+        '200':
+          description: Depósito realizado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CuentaResponse'
+        '400':
+          description: Error de validación (monto no válido)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Cuenta no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /cuentas/{cuentaId}/retirar:
+    put:
+      tags:
+        - Cuentas
+      summary: Realizar un retiro de una cuenta bancaria
+      parameters:
+        - name: cuentaId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                monto:
+                  type: number
+                  format: double
+                  description: Monto a retirar.
+      responses:
+        '200':
+          description: Retiro realizado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CuentaResponse'
+        '400':
+          description: 'Error de validación (monto no válido, saldo insuficiente)'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Cuenta no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /cuentas/cliente/{clienteId}:
+    get:
+      tags:
+        - Cuentas
+      summary: Obtener cuentas por ID de cliente
+      description: Obtiene todas las cuentas bancarias asociadas a un cliente específico.
+      parameters:
+        - name: clienteId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Lista de cuentas del cliente (puede estar vacía)
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CuentaResponse'
+        '404':
+          description: Cliente no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    TipoCuenta:
+      type: string
+      enum:
+        - AHORROS
+        - CORRIENTE
+    CuentaRequest:
+      type: object
+      required:
+        - clienteId
+        - tipoCuenta
+        - saldoInicial
+      properties:
+        clienteId:
+          type: integer
+          format: int64
+          description: ID del cliente al que pertenece la cuenta.
+        tipoCuenta:
+          $ref: '#/components/schemas/TipoCuenta'
+        saldoInicial:
+          type: number
+          format: double
+          description: 'Saldo inicial de la cuenta. Debe ser mayor a 0.'
+          minimum: 0.01
+    CuentaResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        numeroCuenta:
+          type: string
+          description: Número de cuenta único generado automáticamente.
+        saldo:
+          type: number
+          format: double
+        tipoCuenta:
+          $ref: '#/components/schemas/TipoCuenta'
+        clienteId:
+          type: integer
+          format: int64
+    ErrorResponse:
+      type: object
+      properties:
+        errorCode:
+          type: string
+        message:
+          type: string
