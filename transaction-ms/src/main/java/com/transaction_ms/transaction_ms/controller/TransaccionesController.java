@@ -47,17 +47,21 @@ public class TransaccionesController implements TransaccionesApiDelegate {
                 .map(this::mapToResponse)
                 .map(response -> new ResponseEntity<>(response, HttpStatus.CREATED));
     }
-
     @Override
-    public Mono<ResponseEntity<Flux<TransaccionResponse>>> historial(String cuentaId, ServerWebExchange exchange) {
+    public Mono<ResponseEntity<Flux<TransaccionResponse>>> historial(
+            String cuentaId,
+            EstadoTransaccion estado,
+            TipoTransaccion tipo,
+            ServerWebExchange exchange) {
 
-        Optional<String> optionalCuentaId = Optional.ofNullable(cuentaId)
-                .filter(id -> !id.isBlank());
-
-        Flux<TransaccionResponse> historialFlux = transactionService.findTransactionHistory(optionalCuentaId)
+        Flux<TransaccionResponse> responseFlux = transactionService.getFilteredHistory(
+                        cuentaId,
+                        estado != null ? estado.getValue() : null,
+                        tipo != null ? tipo.getValue() : null
+                )
                 .map(this::mapToResponse);
 
-        return Mono.just(new ResponseEntity<>(historialFlux, HttpStatus.OK));
+        return Mono.just(new ResponseEntity<>(responseFlux, HttpStatus.OK));
     }
 
     private TransaccionResponse mapToResponse(Transaction transaction) {

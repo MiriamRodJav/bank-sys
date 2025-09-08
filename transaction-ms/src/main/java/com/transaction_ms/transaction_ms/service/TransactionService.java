@@ -6,14 +6,18 @@ import com.transaction_ms.transaction_ms.model.*;
 import com.transaction_ms.transaction_ms.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientRequestException;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import org.springframework.data.mongodb.core.query.Query;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Optional;
@@ -22,11 +26,13 @@ import java.util.Optional;
 public class TransactionService {
     private final TransactionRepository transactionRepository;
     private final WebClient webClient;
-
+    private final ReactiveMongoTemplate mongoTemplate;
     public TransactionService(TransactionRepository transactionRepository,
-                              @Value("${microservices.accounts.url:http://localhost:8081}") String accountsMicroserviceUrl) {
+                              @Value("${microservices.accounts.url:http://localhost:8081}") String accountsMicroserviceUrl,
+                              ReactiveMongoTemplate mongoTemplate) {
         this.transactionRepository = transactionRepository;
         this.webClient = WebClient.builder().baseUrl(accountsMicroserviceUrl).build();
+        this.mongoTemplate = mongoTemplate;
     }
 
 
@@ -117,11 +123,28 @@ public class TransactionService {
         tx.setCuentaDestinoId(request.getCuentaDestinoId());
         return tx;
     }
-    public Flux<Transaction> findTransactionHistory(Optional<String> cuentaId) {
-        if (cuentaId.isPresent()) {
-            return transactionRepository.findByCuentaOrigenId(cuentaId.get());
-        } else {
-            return transactionRepository.findAll();
+    public Flux<Transaction> getFilteredHistory(String accountId, String estado, String tipo) {
+        Query query = new Query();
+        Criteria criteria = new Criteria();
+
+        if (StringUtils.hasText(accountId)) {
+            Criteria accountCriteria = new Criteria().orOperator(
+                    Criteria.where("cuentaOrigenId").is(accountId),
+                    Criteria.where("cuentaDestinoId").is(accountId)
+            );
+            criteria.andOperator(accountCriteria);
         }
+
+        if (StringUtils.hasText(estado)) {
+            criteria.and("estado").is(estado);
+        }
+
+        if (StringUtils.hasText(tipo)) {
+            criteria.and("tipo").is(tipo);
+        }
+
+        query.addCriteria(criteria);
+
+        return mongoTemplate.find(query, Transaction.class);
     }
 }

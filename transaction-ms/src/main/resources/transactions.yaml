@@ -83,20 +83,19 @@ paths:
       parameters:
         - in: query
           name: cuentaId
-          schema: { type: string }
-#        - in: query
-#          name: dni
-#          schema: { type: string }
-#        - in: query
-#          name: tipo
-#          schema:
-#            $ref: '#/components/schemas/TipoTransaccion'
-#        - in: query
-#          name: desde
-#          schema: { type: string }
-#        - in: query
-#          name: hasta
-#          schema: { type: string }
+          schema:
+            type: string
+          description: El ID de la cuenta para filtrar el historial de transacciones.
+        - in: query
+          name: estado
+          schema:
+            $ref: '#/components/schemas/EstadoTransaccion'
+          description: El estado de la transacción a filtrar (SUCCESS, FAILED).
+        - in: query
+          name: tipo
+          schema:
+            $ref: '#/components/schemas/TipoTransaccion'
+          description: El tipo de transacción a filtrar (DEPOSITO, RETIRO, TRANSFERENCIA).
       responses:
         '200':
           description: OK

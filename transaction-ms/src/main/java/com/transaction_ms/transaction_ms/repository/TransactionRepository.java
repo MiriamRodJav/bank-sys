@@ -10,6 +10,5 @@ import java.time.OffsetDateTime;
 
 @Repository
 public interface TransactionRepository extends ReactiveMongoRepository<Transaction, String> {
-    Flux<Transaction> findByCuentaOrigenId(String cuentaId);
-    Flux<Transaction> findAll();
+
 }
