@@ -82,17 +82,41 @@ public class TransactionService {
         return tx;
     }
     public Mono<Transaction> processTransfer(TransferenciaRequest request) {
-        Transaction transaction = new Transaction();
-        transaction.setTipo("TRANSFERENCIA");
-        transaction.setMonto(request.getMonto());
-        transaction.setCuentaOrigenId(request.getCuentaOrigenId());
-        transaction.setCuentaDestinoId(request.getCuentaDestinoId());
-        transaction.setFecha(LocalDateTime.now());
-        transaction.setEstado("SUCCESS");
-        transaction.setReferencia(request.getReferencia());
-        return transactionRepository.save(transaction);
-    }
+        return webClient.put()
+                .uri("/cuentas/{cuentaId}/retirar", request.getCuentaOrigenId())
+                .bodyValue(Map.of("monto", request.getMonto()))
+                .retrieve()
+                .bodyToMono(Void.class)
 
+                .then(
+                        webClient.put()
+                                .uri("/cuentas/{cuentaId}/depositar", request.getCuentaDestinoId())
+                                .bodyValue(Map.of("monto", request.getMonto()))
+                                .retrieve()
+                                .bodyToMono(Void.class)
+                )
+
+                .then(Mono.defer(() -> {
+                    Transaction tx = createTransactionTransfer(request, "SUCCESS");
+                    return transactionRepository.save(tx);
+                }))
+
+                .onErrorResume(e -> {
+                    Transaction tx = createTransactionTransfer(request, "FAILED");
+                    return transactionRepository.save(tx);
+                });
+    }
+    private Transaction createTransactionTransfer(TransferenciaRequest request, String status) {
+        Transaction tx = new Transaction();
+        tx.setTipo("TRANSFERENCIA");
+        tx.setMonto(request.getMonto());
+        tx.setFecha(LocalDateTime.now());
+        tx.setEstado(status);
+        tx.setReferencia(request.getReferencia());
+        tx.setCuentaOrigenId(request.getCuentaOrigenId());
+        tx.setCuentaDestinoId(request.getCuentaDestinoId());
+        return tx;
+    }
     public Flux<Transaction> findTransactionHistory(Optional<String> cuentaId) {
         if (cuentaId.isPresent()) {
             return transactionRepository.findByCuentaOrigenId(cuentaId.get());
