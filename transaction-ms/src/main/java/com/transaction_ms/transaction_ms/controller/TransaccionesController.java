@@ -1,10 +1,12 @@
 package com.transaction_ms.transaction_ms.controller;
 import com.transaction_ms.transaction_ms.domain.Transaction;
+import com.transaction_ms.transaction_ms.exception.TransactionException;
 import com.transaction_ms.transaction_ms.model.*;
 import com.transaction_ms.transaction_ms.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
@@ -17,13 +19,18 @@ public class TransaccionesController implements TransaccionesApiDelegate {
     @Autowired
     private TransactionService transactionService;
     @Override
-    public Mono<ResponseEntity<TransaccionResponse>> depositar(
+    public Mono<ResponseEntity<TransaccionResponse>> depositar(@RequestBody
             Mono<DepositoRequest> depositoRequest,
             ServerWebExchange exchange) {
         return depositoRequest
                 .flatMap(request -> transactionService.processDeposit(request))
                 .map(this::mapToResponse)
-                .map(response -> new ResponseEntity<>(response, HttpStatus.CREATED));
+                .map(response -> new ResponseEntity<>(response, HttpStatus.CREATED))
+                .onErrorResume(TransactionException.class, ex -> {
+                    TransaccionResponse errorResponse = new TransaccionResponse();
+                    errorResponse.setEstado(EstadoTransaccion.FAILED);
+                    return Mono.just(new ResponseEntity<>(errorResponse, ex.getHttpStatus()));
+                });
     }
 
     @Override
