@@ -23,7 +23,8 @@ public class TransactionService {
     private final TransactionRepository transactionRepository;
     private final WebClient webClient;
 
-    public TransactionService(TransactionRepository transactionRepository, @Value("${microservices.accounts.url:http://localhost:8081}") String accountsMicroserviceUrl) {
+    public TransactionService(TransactionRepository transactionRepository,
+                              @Value("${microservices.accounts.url:http://localhost:8081}") String accountsMicroserviceUrl) {
         this.transactionRepository = transactionRepository;
         this.webClient = WebClient.builder().baseUrl(accountsMicroserviceUrl).build();
     }
@@ -31,47 +32,55 @@ public class TransactionService {
 
     public Mono<Transaction> processDeposit(DepositoRequest request) {
 
-        Mono<Transaction> transactionMono = webClient.put()
+        return webClient.put()
                 .uri("/cuentas/{cuentaId}/depositar", request.getCuentaId())
                 .bodyValue(Map.of("monto", request.getMonto()))
                 .retrieve()
-
-                .bodyToMono(CuentaResponse.class)
-                .map(resp -> createTransaction(request, "SUCCESS"))
-
-                .onErrorResume(WebClientResponseException.class, e -> {
-                    return Mono.just(createTransaction(request, "FAILED"));
-                })
-                .onErrorResume(Exception.class, e -> {
-                    return Mono.just(createTransaction(request, "FAILED"));
+                .bodyToMono(Void.class)
+                .then(Mono.just(createTransactionDeposit(request, "SUCCESS")))
+                .flatMap(transactionRepository::save)
+                .onErrorResume(e -> {
+                    Mono<Transaction> failedTransactionMono = Mono.just(createTransactionDeposit(request, "FAILED"));
+                    return failedTransactionMono.flatMap(transactionRepository::save);
                 });
-
-        return transactionMono.flatMap(transactionRepository::save);
     }
 
-
-    private Transaction createTransaction(DepositoRequest request, String status) {
+    private Transaction createTransactionDeposit(DepositoRequest request, String status) {
         Transaction tx = new Transaction();
         tx.setTipo("DEPOSITO");
         tx.setMonto(request.getMonto());
-        tx.setCuentaDestinoId(request.getCuentaId());
         tx.setFecha(LocalDateTime.now());
         tx.setEstado(status);
         tx.setReferencia(request.getReferencia());
+        tx.setCuentaOrigenId(request.getCuentaId());
         return tx;
     }
+
     public Mono<Transaction> processWithdrawal(RetiroRequest request) {
-        Transaction transaction = new Transaction();
 
-        transaction.setTipo("RETIRO");
-        transaction.setMonto(request.getMonto());
-        transaction.setCuentaOrigenId(request.getCuentaId());
-        transaction.setFecha(LocalDateTime.now());
-        transaction.setEstado("SUCCESS");
-        transaction.setReferencia(request.getReferencia());
-        return transactionRepository.save(transaction);
+        return webClient.put()
+                .uri("/cuentas/{cuentaId}/retirar", request.getCuentaId())
+                .bodyValue(Map.of("monto", request.getMonto()))
+                .retrieve()
+                .bodyToMono(Void.class)
+                .then(Mono.just(createTransactionWithdrawal(request, "SUCCESS")))
+                .flatMap(transactionRepository::save)
+                .onErrorResume(e -> {
+                    Mono<Transaction> failedTransactionMono = Mono.just(createTransactionWithdrawal(request, "FAILED"));
+                    return failedTransactionMono.flatMap(transactionRepository::save);
+                });
+
     }
-
+    private Transaction createTransactionWithdrawal(RetiroRequest request, String status) {
+        Transaction tx = new Transaction();
+        tx.setTipo("RETIRO");
+        tx.setMonto(request.getMonto());
+        tx.setFecha(LocalDateTime.now());
+        tx.setEstado(status);
+        tx.setReferencia(request.getReferencia());
+        tx.setCuentaOrigenId(request.getCuentaId());
+        return tx;
+    }
     public Mono<Transaction> processTransfer(TransferenciaRequest request) {
         Transaction transaction = new Transaction();
         transaction.setTipo("TRANSFERENCIA");

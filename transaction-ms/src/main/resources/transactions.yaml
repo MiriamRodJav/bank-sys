@@ -163,23 +163,3 @@ components:
           type: string
         message:
           type: string
-    CuentaResponse:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        numeroCuenta:
-          type: string
-          description: Número de cuenta único generado automáticamente.
-        saldo:
-          type: number
-          format: double
-        tipoCuenta:
-          type: string
-          enum:
-            - AHORROS
-            - CORRIENTE
-        clienteId:
-          type: integer
-          format: int64

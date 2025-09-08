@@ -25,12 +25,7 @@ public class TransaccionesController implements TransaccionesApiDelegate {
         return depositoRequest
                 .flatMap(request -> transactionService.processDeposit(request))
                 .map(this::mapToResponse)
-                .map(response -> new ResponseEntity<>(response, HttpStatus.CREATED))
-                .onErrorResume(TransactionException.class, ex -> {
-                    TransaccionResponse errorResponse = new TransaccionResponse();
-                    errorResponse.setEstado(EstadoTransaccion.FAILED);
-                    return Mono.just(new ResponseEntity<>(errorResponse, ex.getHttpStatus()));
-                });
+                .map(response -> new ResponseEntity<>(response, HttpStatus.CREATED));
     }
 
     @Override
