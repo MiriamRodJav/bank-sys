@@ -58,23 +58,19 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
-            <!--Test-->
-            <exclusions>
-                <exclusion>
-                    <groupId>org.junit.vintage</groupId>
-                    <artifactId>junit-vintage-engine</artifactId>
-                </exclusion>
-            </exclusions>
-            <!--Test-->
 		</dependency>
-
-        <!--Test-->
         <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-junit-jupiter</artifactId>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.8.2</version>
             <scope>test</scope>
         </dependency>
-        <!--Test-->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.8.2</version>
+            <scope>test</scope>
+        </dependency>
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
@@ -122,6 +118,13 @@
 							<modelPackage>com.customer.customer_ms.model</modelPackage>
 
 							<configOptions>
+<!--								<interfaceOnly>true</interfaceOnly>-->
+<!--								no controller-->
+<!--								<delegatePattern>false</delegatePattern>-->
+<!--								<interfaceOnly>true</interfaceOnly>-->
+<!--								<generateControllers>false</generateControllers>-->
+
+<!--								genera controller-->
 								<delegatePattern>true</delegatePattern>
 								<useTags>true</useTags>
 								<generateApis>true</generateApis>
@@ -190,23 +193,21 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>3.5.0</version>
+                <version>3.6.0</version>
                 <configuration>
-                    <configLocation>google_checks.xml</configLocation>
-                    <consoleOutput>true</consoleOutput>
-                    <failOnViolation>false</failOnViolation>
+                    <!-- Usa ruta relativa al proyecto -->
+                    <configLocation>${project.basedir}/src/main/resources/checkstyle.xml</configLocation>
+                    <!-- Para que la build falle si hay errores -->
+                    <failOnViolation>true</failOnViolation>
+                    <!-- Genera reporte HTML -->
+                    <outputFile>${project.build.directory}/checkstyle-result.xml</outputFile>
                 </configuration>
                 <executions>
                     <execution>
-                        <id>checkstyle-validate</id>
+                        <id>validate</id>
                         <phase>validate</phase>
-                        <goals><goal>check</goal></goals>
-                    </execution>
-                    <execution>
-                        <id>checkstyle-report</id>
-                        <phase>site</phase>
                         <goals>
-                            <goal>checkstyle</goal>
+                            <goal>check</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -253,5 +254,4 @@
             <!-- Jacoco Plugin -->
         </plugins>
 	</build>
-
 </project>

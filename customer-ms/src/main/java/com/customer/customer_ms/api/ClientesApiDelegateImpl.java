@@ -16,17 +16,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class ClientesApiDelegateImpl implements ClientesApiDelegate{
+public class ClientesApiDelegateImpl implements ClientesApiDelegate {
     private final ClienteRepository clienteRepository;
     private final RestTemplate restTemplate;
-    public ClientesApiDelegateImpl(ClienteRepository clienteRepository,RestTemplate restTemplate) {
-
+    public ClientesApiDelegateImpl(ClienteRepository clienteRepository, RestTemplate restTemplate) {
         this.clienteRepository = clienteRepository;
         this.restTemplate = restTemplate;
     }
@@ -100,7 +98,7 @@ public class ClientesApiDelegateImpl implements ClientesApiDelegate{
                 "http://localhost:8081/cuentas/cliente/{clienteId}",
                 HttpMethod.GET,
                 null,
-                new ParameterizedTypeReference<>() {},
+                new ParameterizedTypeReference<>() { },
                 id
         );
 
@@ -109,7 +107,8 @@ public class ClientesApiDelegateImpl implements ClientesApiDelegate{
         boolean tieneCuentasActivas = cuentas != null && !cuentas.isEmpty();
 
         if (tieneCuentasActivas) {
-            throw new ClienteConCuentasActivasException("El cliente con ID " + id + " no puede ser eliminado porque tiene cuentas activas.");
+            throw new ClienteConCuentasActivasException("El cliente con ID " + id +
+                    " no puede ser eliminado porque tiene cuentas activas.");
         }
 
         clienteRepository.deleteById(id);
@@ -131,7 +130,8 @@ public class ClientesApiDelegateImpl implements ClientesApiDelegate{
 
         if (!clienteExistente.getDni().equals(clienteRequest.getDni())) {
             if (clienteRepository.findByDni(clienteRequest.getDni()).isPresent()) {
-                throw new ClienteDuplicadoException("El DNI " + clienteRequest.getDni() + " ya está registrado en otro cliente.");
+                throw new ClienteDuplicadoException("El DNI " + clienteRequest.getDni() +
+                        " ya está registrado en otro cliente.");
             }
         }
 
