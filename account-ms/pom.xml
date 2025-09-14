@@ -156,6 +156,49 @@
 					</execution>
 				</executions>
 			</plugin>
+            <!-- Jacoco básico -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.11</version>
+                <executions>
+                    <execution>
+                        <id>prepare-agent</id>
+                        <goals><goal>prepare-agent</goal></goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>verify</phase>
+                        <goals><goal>report</goal></goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Checkstyle mínimo -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>3.6.0</version>
+                <configuration>
+                    <!-- Usa ruta relativa al proyecto -->
+                    <configLocation>${project.basedir}/src/main/resources/checkstyle.xml</configLocation>
+                    <!-- Para que la build falle si hay errores -->
+                    <failOnViolation>true</failOnViolation>
+                    <!-- Genera reporte HTML -->
+                    <outputFile>${project.build.directory}/checkstyle-result.xml</outputFile>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>validate</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>

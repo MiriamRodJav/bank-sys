@@ -4,12 +4,23 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1d4789fa-77a6-4650-ae70-fbd5a5b6a70c" name="Changes" comment="">
+    <list default="true" id="1d4789fa-77a6-4650-ae70-fbd5a5b6a70c" name="Changes" comment="ENTREGABLE 02">
+      <change afterPath="$PROJECT_DIR$/account-ms/src/main/resources/checkstyle.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/account-ms/src/test/java/com/account/account_ms/controller/CuentasApiDelegateImplTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/account-ms/src/test/java/com/account/account_ms/exceptions/GlobalExceptionHandlerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nttdata/bank/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nttdata/bank/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nttdata/bank/repository/BankAccountRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nttdata/bank/repository/BankAccountRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nttdata/bank/repository/BankAccountRepositoryImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nttdata/bank/repository/BankAccountRepositoryImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nttdata/bank/service/BankAccountService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nttdata/bank/service/BankAccountService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-ms/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/account-ms/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-ms/src/main/java/com/account/account_ms/controller/CuentasApiDelegateImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-ms/src/main/java/com/account/account_ms/controller/CuentasApiDelegateImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-ms/src/main/java/com/account/account_ms/entity/CuentaEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-ms/src/main/java/com/account/account_ms/entity/CuentaEntity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-ms/src/main/java/com/account/account_ms/exceptions/ClienteNoEncontradoException.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-ms/src/main/java/com/account/account_ms/exceptions/ClienteNoEncontradoException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-ms/src/main/java/com/account/account_ms/exceptions/CuentaNoEncontradaException.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-ms/src/main/java/com/account/account_ms/exceptions/CuentaNoEncontradaException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-ms/src/main/java/com/account/account_ms/exceptions/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-ms/src/main/java/com/account/account_ms/exceptions/GlobalExceptionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-ms/src/main/java/com/account/account_ms/exceptions/SaldoInsuficienteException.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-ms/src/main/java/com/account/account_ms/exceptions/SaldoInsuficienteException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-ms/src/main/java/com/account/account_ms/exceptions/ValidacionCuentaException.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-ms/src/main/java/com/account/account_ms/exceptions/ValidacionCuentaException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-ms/src/main/java/com/account/account_ms/repository/CuentaRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-ms/src/main/java/com/account/account_ms/repository/CuentaRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-ms/src/test/java/com/account/account_ms/AccountMicroserviceApplicationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-ms/src/test/java/com/account/account_ms/AccountMicroserviceApplicationTests.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,6 +42,10 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="KubernetesApiPersistence"><![CDATA[{}]]></component>
+  <component name="KubernetesApiProvider"><![CDATA[{
+  "isMigrated": true
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 8
@@ -43,17 +58,55 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Application.Main.executor": "Run",
+    "JUnit.AccountMicroserviceApplicationTests.executor": "Run",
+    "JUnit.CuentasApiDelegateImplTest.executor": "Coverage",
+    "JUnit.GlobalExceptionHandlerTest.executor": "Coverage",
+    "Maven. [clean,install].executor": "Run",
+    "Maven.account-ms [checkstyle:check].executor": "Run",
+    "Maven.account-ms [clean,install].executor": "Run",
+    "Maven.account-ms [clean,test].executor": "Run",
+    "Maven.account-ms [clean,verify].executor": "Run",
+    "Maven.customer-ms [clean,install].executor": "Run",
+    "Maven.transaction-ms [clean,install].executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "main",
+    "Spring Boot.TransactionMsApplication.executor": "Run",
+    "git-widget-placeholder": "entregable-04",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "D:/Workspaces/NTT/Bootcamp Java/bank-sys",
-    "settings.editor.selected.configurable": "preferences.pluginManager"
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "run.configurations.included.in.services": "true",
+    "settings.editor.selected.configurable": "File.Encoding"
   }
 }]]></component>
-  <component name="RunManager">
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="mvn clean install" />
+      <command value="mvn clean test" />
+      <command value="mvn clean verify" />
+      <command value="mvn checkstyle:check" />
+    </option>
+  </component>
+  <component name="RunDashboard">
+    <option name="configurationTypes">
+      <set>
+        <option value="KtorApplicationConfigurationType" />
+        <option value="MicronautRunConfigurationType" />
+        <option value="QuarkusRunConfigurationType" />
+        <option value="SpringBootApplicationConfigurationType" />
+      </set>
+    </option>
+  </component>
+  <component name="RunManager" selected="JUnit.CuentasApiDelegateImplTest">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="ALTERNATIVE_JRE_PATH" value="11" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
@@ -74,8 +127,78 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="AccountMicroserviceApplicationTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="account-ms" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.account.account_ms.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.account.account_ms" />
+      <option name="MAIN_CLASS_NAME" value="com.account.account_ms.AccountMicroserviceApplicationTests" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="CuentasApiDelegateImplTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="account-ms" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.account.account_ms.controller.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.account.account_ms.controller" />
+      <option name="MAIN_CLASS_NAME" value="com.account.account_ms.controller.CuentasApiDelegateImplTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="GlobalExceptionHandlerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="account-ms" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.account.account_ms.exceptions.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.account.account_ms.exceptions" />
+      <option name="MAIN_CLASS_NAME" value="com.account.account_ms.exceptions.GlobalExceptionHandlerTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="AccountMicroserviceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="account-ms" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.account.account_ms.AccountMicroserviceApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="CustomerMicroserviceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="customer-ms" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.customer.customer_ms.CustomerMicroserviceApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TransactionMsApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+      <module name="transaction-ms" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.transaction_ms.transaction_ms.TransactionMsApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.CuentasApiDelegateImplTest" />
+        <item itemvalue="JUnit.GlobalExceptionHandlerTest" />
+        <item itemvalue="JUnit.AccountMicroserviceApplicationTests" />
         <item itemvalue="Application.Main" />
       </list>
     </recent_temporary>
@@ -89,5 +212,24 @@
       <updated>1756067220610</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/bank_sys$CuentasApiDelegateImplTest.ic" NAME="CuentasApiDelegateImplTest Coverage Results" MODIFIED="1757815013213" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
+      <FILTER>com.account.account_ms.controller.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/bank_sys$GlobalExceptionHandlerTest.ic" NAME="GlobalExceptionHandlerTest Coverage Results" MODIFIED="1757830478129" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
+      <FILTER>com.account.account_ms.exceptions.*</FILTER>
+    </SUITE>
   </component>
 </project>

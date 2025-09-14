@@ -1,6 +1,8 @@
 package com.account.account_ms.exceptions;
 
-import com.account.account_ms.model.ErrorResponse;
+
+import java.util.stream.Collectors;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -8,7 +10,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 
-import java.util.stream.Collectors;
+import com.account.account_ms.model.ErrorResponse;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {

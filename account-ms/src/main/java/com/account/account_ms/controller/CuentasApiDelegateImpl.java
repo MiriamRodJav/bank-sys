@@ -4,18 +4,18 @@ import com.account.account_ms.exceptions.ClienteNoEncontradoException;
 import com.account.account_ms.exceptions.CuentaNoEncontradaException;
 import com.account.account_ms.exceptions.SaldoInsuficienteException;
 import com.account.account_ms.exceptions.ValidacionCuentaException;
-import com.account.account_ms.model.*;
+import com.account.account_ms.model.CuentaRequest;
+import com.account.account_ms.model.CuentaResponse;
+import com.account.account_ms.model.CuentasCuentaIdDepositarPutRequest;
+import com.account.account_ms.model.CuentasCuentaIdRetirarPutRequest;
 import com.account.account_ms.repository.CuentaRepository;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
-
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
@@ -111,15 +111,12 @@ public class CuentasApiDelegateImpl implements CuentasApiDelegate {
         if (cuentaOptional.isEmpty()) {
             throw new CuentaNoEncontradaException("Cuenta con ID " + cuentaId + " no encontrada.");
         }
-
         if (body.getMonto() <= 0) {
             throw new ValidacionCuentaException("El monto a depositar debe ser mayor a 0.");
         }
-
         CuentaEntity cuenta = cuentaOptional.get();
         cuenta.setSaldo(cuenta.getSaldo() + body.getMonto());
         CuentaEntity cuentaActualizada = cuentaRepository.save(cuenta);
-
         return new ResponseEntity<>(mapToCuentaResponse(cuentaActualizada), HttpStatus.OK);
     }
 
@@ -129,11 +126,9 @@ public class CuentasApiDelegateImpl implements CuentasApiDelegate {
         if (cuentaOptional.isEmpty()) {
             throw new CuentaNoEncontradaException("Cuenta con ID " + cuentaId + " no encontrada.");
         }
-
         if (body.getMonto() <= 0) {
             throw new ValidacionCuentaException("El monto a retirar debe ser mayor a 0.");
         }
-
         CuentaEntity cuenta = cuentaOptional.get();
 
         if (cuenta.getTipoCuenta() == CuentaEntity.TipoCuentaEnum.AHORROS) {
@@ -161,9 +156,7 @@ public class CuentasApiDelegateImpl implements CuentasApiDelegate {
             return new ResponseEntity<>(cuentas.stream().map(this::mapToCuentaResponse).collect(Collectors.toList()), HttpStatus.OK);
         }
 
-        List<CuentaResponse> responseList = cuentas.stream()
-                .map(this::mapToCuentaResponse)
-                .collect(Collectors.toList());
+        List<CuentaResponse> responseList = cuentas.stream().map(this::mapToCuentaResponse).collect(Collectors.toList());
         return new ResponseEntity<>(responseList, HttpStatus.OK);
     }
 
