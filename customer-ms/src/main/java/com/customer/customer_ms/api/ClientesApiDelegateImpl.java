@@ -1,5 +1,8 @@
 package com.customer.customer_ms.api;
 
+import com.account.client.api.CuentasApi;
+import com.account.client.model.CuentaResponse;
+
 import com.customer.customer_ms.entity.ClienteEntity;
 import com.customer.customer_ms.exceptions.ClienteConCuentasActivasException;
 import com.customer.customer_ms.exceptions.ClienteDuplicadoException;
@@ -7,28 +10,25 @@ import com.customer.customer_ms.exceptions.ClientesNoEncontradosException;
 import com.customer.customer_ms.exceptions.ValidacionException;
 import com.customer.customer_ms.model.ClienteRequest;
 import com.customer.customer_ms.model.ClienteResponse;
-import com.customer.customer_ms.model.CuentaResponse;
 import com.customer.customer_ms.repository.ClienteRepository;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class ClientesApiDelegateImpl implements ClientesApiDelegate{
-    private final ClienteRepository clienteRepository;
-    private final RestTemplate restTemplate;
-    public ClientesApiDelegateImpl(ClienteRepository clienteRepository,RestTemplate restTemplate) {
+public class ClientesApiDelegateImpl implements ClientesApiDelegate {
 
+    private final ClienteRepository clienteRepository;
+    private final CuentasApi cuentasApi; // ✅ cliente generado desde el OpenAPI de account
+
+    public ClientesApiDelegateImpl(ClienteRepository clienteRepository, CuentasApi cuentasApi) {
         this.clienteRepository = clienteRepository;
-        this.restTemplate = restTemplate;
+        this.cuentasApi = cuentasApi;
     }
 
     @Override
@@ -96,20 +96,16 @@ public class ClientesApiDelegateImpl implements ClientesApiDelegate{
             throw new ClientesNoEncontradosException("Cliente con ID " + id + " no encontrado.");
         }
 
-        ResponseEntity<List<CuentaResponse>> cuentasResponse = restTemplate.exchange(
-                "http://localhost:8081/cuentas/cliente/{clienteId}",
-                HttpMethod.GET,
-                null,
-                new ParameterizedTypeReference<>() {},
-                id
-        );
-
-        List<CuentaResponse> cuentas = cuentasResponse.getBody();
+        // ✅ Usa el cliente generado de account (operationId: listarCuentasPorCliente)
+        // Si el método se generó con otro nombre (p.ej. listarCuentasPorClienteUsingGET),
+        // abre CuentasApi en target/generated-sources/account-client y usa ese nombre.
+        List<CuentaResponse> cuentas = cuentasApi.listarCuentasPorCliente(id);
 
         boolean tieneCuentasActivas = cuentas != null && !cuentas.isEmpty();
-
         if (tieneCuentasActivas) {
-            throw new ClienteConCuentasActivasException("El cliente con ID " + id + " no puede ser eliminado porque tiene cuentas activas.");
+            throw new ClienteConCuentasActivasException(
+                    "El cliente con ID " + id + " no puede ser eliminado porque tiene cuentas activas."
+            );
         }
 
         clienteRepository.deleteById(id);
@@ -121,33 +117,31 @@ public class ClientesApiDelegateImpl implements ClientesApiDelegate{
         validarClienteRequest(clienteRequest);
 
         Optional<ClienteEntity> clienteOptional = clienteRepository.findById(id);
-
         if (clienteOptional.isEmpty()) {
             throw new ClientesNoEncontradosException("Cliente con ID " + id + " no encontrado.");
         }
 
         ClienteEntity clienteExistente = clienteOptional.get();
 
-
         if (!clienteExistente.getDni().equals(clienteRequest.getDni())) {
             if (clienteRepository.findByDni(clienteRequest.getDni()).isPresent()) {
-                throw new ClienteDuplicadoException("El DNI " + clienteRequest.getDni() + " ya está registrado en otro cliente.");
+                throw new ClienteDuplicadoException(
+                        "El DNI " + clienteRequest.getDni() + " ya está registrado en otro cliente."
+                );
             }
         }
-
 
         clienteExistente.setNombre(clienteRequest.getNombre());
         clienteExistente.setApellido(clienteRequest.getApellido());
         clienteExistente.setDni(clienteRequest.getDni());
         clienteExistente.setEmail(clienteRequest.getEmail());
 
-
         ClienteEntity clienteActualizado = clienteRepository.save(clienteExistente);
-
         ClienteResponse clienteResponse = mapToClienteResponse(clienteActualizado);
 
         return new ResponseEntity<>(clienteResponse, HttpStatus.OK);
     }
+
     private void validarClienteRequest(ClienteRequest request) {
         if (request.getNombre() == null || request.getNombre().trim().isEmpty()) {
             throw new ValidacionException("El nombre es requerido");
@@ -166,7 +160,6 @@ public class ClientesApiDelegateImpl implements ClientesApiDelegate{
     }
 
     private boolean isEmailValido(String email) {
-
         return email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$");
     }
 

@@ -4,23 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1d4789fa-77a6-4650-ae70-fbd5a5b6a70c" name="Changes" comment="ENTREGABLE 02">
-      <change afterPath="$PROJECT_DIR$/account-ms/src/main/resources/checkstyle.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/account-ms/src/test/java/com/account/account_ms/controller/CuentasApiDelegateImplTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/account-ms/src/test/java/com/account/account_ms/exceptions/GlobalExceptionHandlerTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="1d4789fa-77a6-4650-ae70-fbd5a5b6a70c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/account-ms/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/account-ms/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/account-ms/src/main/java/com/account/account_ms/controller/CuentasApiDelegateImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-ms/src/main/java/com/account/account_ms/controller/CuentasApiDelegateImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/account-ms/src/main/java/com/account/account_ms/entity/CuentaEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-ms/src/main/java/com/account/account_ms/entity/CuentaEntity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/account-ms/src/main/java/com/account/account_ms/exceptions/ClienteNoEncontradoException.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-ms/src/main/java/com/account/account_ms/exceptions/ClienteNoEncontradoException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/account-ms/src/main/java/com/account/account_ms/exceptions/CuentaNoEncontradaException.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-ms/src/main/java/com/account/account_ms/exceptions/CuentaNoEncontradaException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/account-ms/src/main/java/com/account/account_ms/exceptions/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-ms/src/main/java/com/account/account_ms/exceptions/GlobalExceptionHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/account-ms/src/main/java/com/account/account_ms/exceptions/SaldoInsuficienteException.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-ms/src/main/java/com/account/account_ms/exceptions/SaldoInsuficienteException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/account-ms/src/main/java/com/account/account_ms/exceptions/ValidacionCuentaException.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-ms/src/main/java/com/account/account_ms/exceptions/ValidacionCuentaException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/account-ms/src/main/java/com/account/account_ms/repository/CuentaRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-ms/src/main/java/com/account/account_ms/repository/CuentaRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/account-ms/src/test/java/com/account/account_ms/AccountMicroserviceApplicationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/account-ms/src/test/java/com/account/account_ms/AccountMicroserviceApplicationTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account-ms/src/main/resources/account-api.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/customer-ms/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/customer-ms/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/customer-ms/src/main/java/com/customer/customer_ms/api/ClientesApiDelegateImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/customer-ms/src/main/java/com/customer/customer_ms/api/ClientesApiDelegateImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/customer-ms/src/main/resources/customer-api.yml" beforeDir="false" afterPath="$PROJECT_DIR$/customer-ms/src/main/resources/customer-api.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/transaction-ms/src/main/resources/transactions.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/transaction-ms/src/main/resources/transactions.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,10 +33,10 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="KubernetesApiPersistence"><![CDATA[{}]]></component>
-  <component name="KubernetesApiProvider"><![CDATA[{
-  "isMigrated": true
-}]]></component>
+  <component name="KubernetesApiPersistence">{}</component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
+}</component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 8
@@ -74,26 +65,30 @@
     "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Spring Boot.TransactionMsApplication.executor": "Run",
-    "git-widget-placeholder": "entregable-04",
+    "git-widget-placeholder": "entregable-final-grupo-02",
+    "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "D:/Workspaces/NTT/Bootcamp Java/bank-sys",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
     "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
     "run.configurations.included.in.services": "true",
-    "settings.editor.selected.configurable": "File.Encoding"
+    "settings.editor.selected.configurable": "File.Encoding",
+    "to.speed.mode.migration.done": "true",
+    "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
   <component name="RunAnythingCache">
     <option name="myCommands">
-      <command value="mvn clean install" />
       <command value="mvn clean test" />
       <command value="mvn clean verify" />
       <command value="mvn checkstyle:check" />
+      <command value="mvn clean install" />
     </option>
   </component>
   <component name="RunDashboard">
@@ -203,6 +198,14 @@
       </list>
     </recent_temporary>
   </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.25557.131" />
+        <option value="bundled-js-predefined-d6986cc7102b-b598e85cdad2-JavaScript-IU-252.25557.131" />
+      </set>
+    </attachedChunks>
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="1d4789fa-77a6-4650-ae70-fbd5a5b6a70c" name="Changes" comment="" />
@@ -210,8 +213,13 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1756067220610</updated>
+      <workItem from="1757870006884" duration="383000" />
+      <workItem from="1758679580438" duration="17831000" />
     </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">

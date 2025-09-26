@@ -121,13 +121,6 @@
 							<modelPackage>com.account.account_ms.model</modelPackage>
 
 							<configOptions>
-								<!--								<interfaceOnly>true</interfaceOnly>-->
-								<!--								no controller-->
-								<!--								<delegatePattern>false</delegatePattern>-->
-								<!--								<interfaceOnly>true</interfaceOnly>-->
-								<!--								<generateControllers>false</generateControllers>-->
-
-								<!--								genera controller-->
 								<delegatePattern>true</delegatePattern>
 
 								<useTags>true</useTags>

@@ -4,161 +4,297 @@ info:
   description: API para la gestión de historial de transacciones bancarias.
   version: 1.0.0
 servers:
-  - url: http://localhost:8082
+  - url: http://{host}/api/v1
+    variables:
+      host:
+        default: localhost:8082
 tags:
   - name: Transacciones
+    description: Operaciones relacionadas con transacciones bancarias
+
 paths:
   /transacciones/deposito:
     post:
-      tags:
-        - Transacciones
+      tags: [Transacciones]
       summary: Registrar depósito
       operationId: depositar
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
       requestBody:
         required: true
         content:
           application/json:
             schema: { $ref: '#/components/schemas/DepositoRequest' }
+            example:
+              cuentaId: "ACC-1001"
+              monto: 250.50
+              referencia: "DEP Cajero 123"
       responses:
         '201':
-          description: Creado
+          description: Depósito registrado
+          headers:
+            Location:
+              schema: { type: string }
+              description: URL del recurso transacción creado
           content:
             application/json:
               schema: { $ref: '#/components/schemas/TransaccionResponse' }
-        '400':
-          description: Solicitud incorrecta o cuenta inválida
+        '422':
+          description: Solicitud inválida (monto no válido, datos faltantes)
           content:
             application/json:
               schema: { $ref: '#/components/schemas/ErrorResponse' }
+        '404':
+          description: Cuenta no encontrada
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ErrorResponse' }
+        '500':
+          description: Error interno
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ErrorResponse' }
+
   /transacciones/retiro:
     post:
-      tags:
-        - Transacciones
+      tags: [Transacciones]
       summary: Registrar retiro
       operationId: retirar
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
       requestBody:
         required: true
         content:
           application/json:
             schema: { $ref: '#/components/schemas/RetiroRequest' }
+            example:
+              cuentaId: "ACC-1001"
+              monto: 80.00
+              referencia: "RET Ventanilla 05"
       responses:
         '201':
-          description: Creado
+          description: Retiro registrado
+          headers:
+            Location:
+              schema: { type: string }
+              description: URL del recurso transacción creado
           content:
             application/json:
               schema: { $ref: '#/components/schemas/TransaccionResponse' }
-        '400':
-          description: Solicitud incorrecta, cuenta inválida o saldo insuficiente
+        '422':
+          description: Solicitud inválida (monto no válido, saldo insuficiente)
           content:
             application/json:
               schema: { $ref: '#/components/schemas/ErrorResponse' }
+        '404':
+          description: Cuenta no encontrada
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ErrorResponse' }
+        '409':
+          description: Conflicto (cuenta bloqueada o en estado no operativo)
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ErrorResponse' }
+        '500':
+          description: Error interno
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ErrorResponse' }
+
   /transacciones/transferencia:
     post:
-      tags:
-        - Transacciones
+      tags: [Transacciones]
       summary: Registrar transferencia
       operationId: transferir
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
       requestBody:
         required: true
         content:
           application/json:
             schema: { $ref: '#/components/schemas/TransferenciaRequest' }
+            example:
+              cuentaOrigenId: "ACC-1001"
+              cuentaDestinoId: "ACC-2002"
+              monto: 150.00
+              referencia: "Pago de servicios"
       responses:
         '201':
-          description: Creado
+          description: Transferencia registrada
+          headers:
+            Location:
+              schema: { type: string }
+              description: URL del recurso transacción creado
           content:
             application/json:
               schema: { $ref: '#/components/schemas/TransaccionResponse' }
-        '400':
-          description: Solicitud incorrecta, cuenta inválida o saldo insuficiente
+        '422':
+          description: Solicitud inválida (monto no válido, cuentas iguales, etc.)
           content:
             application/json:
               schema: { $ref: '#/components/schemas/ErrorResponse' }
+        '404':
+          description: Cuenta origen o destino no encontrada
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ErrorResponse' }
+        '409':
+          description: Conflicto (saldo insuficiente, cuenta bloqueada)
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ErrorResponse' }
+        '500':
+          description: Error interno
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ErrorResponse' }
+
   /transacciones/historial:
     get:
-      tags:
-        - Transacciones
+      tags: [Transacciones]
       summary: Consultar historial
       operationId: historial
       parameters:
         - in: query
           name: cuentaId
-          schema:
-            type: string
-          description: El ID de la cuenta para filtrar el historial de transacciones.
+          schema: { type: string }
+          description: ID de la cuenta para filtrar el historial.
         - in: query
           name: estado
-          schema:
-            $ref: '#/components/schemas/EstadoTransaccion'
-          description: El estado de la transacción a filtrar (SUCCESS, FAILED).
+          schema: { $ref: '#/components/schemas/EstadoTransaccion' }
+          description: Estado de la transacción (SUCCESS, FAILED, COMPENSATED).
         - in: query
           name: tipo
-          schema:
-            $ref: '#/components/schemas/TipoTransaccion'
-          description: El tipo de transacción a filtrar (DEPOSITO, RETIRO, TRANSFERENCIA).
+          schema: { $ref: '#/components/schemas/TipoTransaccion' }
+          description: Tipo de transacción (DEPOSITO, RETIRO, TRANSFERENCIA).
+        - in: query
+          name: desde
+          schema: { type: string, format: date-time }
+          description: Fecha/hora inicio (ISO-8601) para filtrar.
+        - in: query
+          name: hasta
+          schema: { type: string, format: date-time }
+          description: Fecha/hora fin (ISO-8601) para filtrar.
+        - in: query
+          name: minMonto
+          schema: { type: number, format: double, minimum: 0.0 }
+          description: Monto mínimo a filtrar.
+        - in: query
+          name: maxMonto
+          schema: { type: number, format: double, minimum: 0.0 }
+          description: Monto máximo a filtrar.
+        - in: query
+          name: page
+          schema: { type: integer, minimum: 0, default: 0 }
+        - in: query
+          name: size
+          schema: { type: integer, minimum: 1, maximum: 100, default: 20 }
+        - in: query
+          name: sort
+          schema: { type: string, example: "fecha,desc" }
       responses:
         '200':
-          description: OK
+          description: Historial de transacciones (puede ser lista vacía)
           content:
             application/json:
               schema:
                 type: array
                 items: { $ref: '#/components/schemas/TransaccionResponse' }
-        '400':
-          description: Parámetros de búsqueda incorrectos
+        '422':
+          description: Parámetros de búsqueda inválidos (rango de fechas, montos, etc.)
           content:
             application/json:
               schema: { $ref: '#/components/schemas/ErrorResponse' }
-        '404':
-          description: No se encontró historial para los parámetros de búsqueda
+        '500':
+          description: Error interno
           content:
             application/json:
               schema: { $ref: '#/components/schemas/ErrorResponse' }
+
 components:
+  parameters:
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      description: Clave única por comando para evitar duplicados en reintentos.
+      schema: { type: string, minLength: 10 }
+
   schemas:
     TipoTransaccion:
       type: string
       enum: [DEPOSITO, RETIRO, TRANSFERENCIA]
+
     EstadoTransaccion:
       type: string
       enum: [SUCCESS, FAILED, COMPENSATED]
+
     DepositoRequest:
       type: object
       required: [cuentaId, monto]
       properties:
-        cuentaId: { type: string }
-        monto: { type: number, format: double, minimum: 0.01 }
-        referencia: { type: string }
+        cuentaId: { type: string, example: "ACC-1001" }
+        monto:
+          type: number
+          format: double
+          minimum: 0.01
+          example: 250.50
+        referencia:
+          type: string
+          example: "DEP Cajero 123"
+
     RetiroRequest:
       type: object
       required: [cuentaId, monto]
       properties:
-        cuentaId: { type: string }
-        monto: { type: number, format: double, minimum: 0.01 }
-        referencia: { type: string }
+        cuentaId: { type: string, example: "ACC-1001" }
+        monto:
+          type: number
+          format: double
+          minimum: 0.01
+          example: 80.00
+        referencia:
+          type: string
+          example: "RET Ventanilla 05"
+
     TransferenciaRequest:
       type: object
       required: [cuentaOrigenId, cuentaDestinoId, monto]
       properties:
-        cuentaOrigenId: { type: string }
-        cuentaDestinoId: { type: string }
-        monto: { type: number, format: double, minimum: 0.01 }
-        referencia: { type: string }
+        cuentaOrigenId: { type: string, example: "ACC-1001" }
+        cuentaDestinoId: { type: string, example: "ACC-2002" }
+        monto:
+          type: number
+          format: double
+          minimum: 0.01
+          example: 150.00
+        referencia:
+          type: string
+          example: "Pago de servicios"
+
     TransaccionResponse:
       type: object
+      required: [id, tipo, estado, monto, fecha]
       properties:
-        id: { type: string }
+        id: { type: string, example: "TX-7890" }
         tipo: { $ref: '#/components/schemas/TipoTransaccion' }
         estado: { $ref: '#/components/schemas/EstadoTransaccion' }
-        monto: { type: number, format: double }
-        fecha: { type: string }
-        cuentaOrigenId: { type: string }
-        cuentaDestinoId: { type: string }
-        referencia: { type: string }
+        monto: { type: number, format: double, example: 150.00 }
+        fecha:
+          type: string
+          format: date-time
+          example: "2025-09-25T14:23:11Z"
+        cuentaOrigenId: { type: string, example: "ACC-1001" }
+        cuentaDestinoId: { type: string, example: "ACC-2002" }
+        referencia: { type: string, example: "Pago de servicios" }
+
     ErrorResponse:
       type: object
       properties:
         errorCode:
           type: string
+          example: "SALDO_INSUFICIENTE"
         message:
           type: string
+          example: "El saldo disponible no es suficiente para completar la operación"
