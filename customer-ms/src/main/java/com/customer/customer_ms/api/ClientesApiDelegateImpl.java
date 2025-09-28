@@ -24,88 +24,64 @@ import java.util.stream.Collectors;
 public class ClientesApiDelegateImpl implements ClientesApiDelegate {
 
     private final ClienteRepository clienteRepository;
-    private final CuentasApi cuentasApi; // ✅ cliente generado desde el OpenAPI de account
+    private final CuentasApi cuentasApi;
 
     public ClientesApiDelegateImpl(ClienteRepository clienteRepository, CuentasApi cuentasApi) {
         this.clienteRepository = clienteRepository;
         this.cuentasApi = cuentasApi;
     }
 
+    // ⚠️ Firma correcta (con page, size, sort)
     @Override
-    public ResponseEntity<List<ClienteResponse>> clientesGet() {
-        try {
-            List<ClienteEntity> clientes = clienteRepository.findAll();
+    public ResponseEntity<List<ClienteResponse>> clientesGet(Integer page, Integer size, String sort) {
+        // Por simplicidad, ignoro paginación aquí; puedes mapearla a Pageable si quieres.
+        List<ClienteEntity> clientes = clienteRepository.findAll();
 
-            if (clientes.isEmpty()) {
-                throw new ClientesNoEncontradosException("No hay clientes registrados");
-            }
-
-            List<ClienteResponse> clienteResponses = clientes.stream()
-                    .map(this::mapToClienteResponse)
-                    .collect(Collectors.toList());
-
-            return new ResponseEntity<>(clienteResponses, HttpStatus.OK);
-
-        } catch (ClientesNoEncontradosException ex) {
-            throw ex;
-        } catch (Exception ex) {
-            throw new RuntimeException("Error interno al obtener clientes", ex);
+        if (clientes.isEmpty()) {
+            throw new ClientesNoEncontradosException("No hay clientes registrados");
         }
+
+        List<ClienteResponse> clienteResponses = clientes.stream()
+                .map(this::mapToClienteResponse)
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(clienteResponses, HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<ClienteResponse> clientesPost(ClienteRequest clienteRequest) {
-        try {
-            validarClienteRequest(clienteRequest);
+        validarClienteRequest(clienteRequest);
 
-            if (clienteRepository.findByDni(clienteRequest.getDni()).isPresent()) {
-                throw new ClienteDuplicadoException(clienteRequest.getDni());
-            }
-
-            ClienteEntity nuevoCliente = mapToClienteEntity(clienteRequest);
-            ClienteEntity clienteGuardado = clienteRepository.save(nuevoCliente);
-
-            ClienteResponse clienteResponse = mapToClienteResponse(clienteGuardado);
-
-            return new ResponseEntity<>(clienteResponse, HttpStatus.CREATED);
-
-        } catch (ValidacionException | ClienteDuplicadoException ex) {
-            throw ex;
-        } catch (Exception ex) {
-            throw new RuntimeException("Error interno al crear cliente", ex);
+        if (clienteRepository.findByDni(clienteRequest.getDni()).isPresent()) {
+            throw new ClienteDuplicadoException(clienteRequest.getDni());
         }
+
+        ClienteEntity nuevoCliente = mapToClienteEntity(clienteRequest);
+        ClienteEntity clienteGuardado = clienteRepository.save(nuevoCliente);
+
+        ClienteResponse clienteResponse = mapToClienteResponse(clienteGuardado);
+        return new ResponseEntity<>(clienteResponse, HttpStatus.CREATED);
     }
 
     @Override
     public ResponseEntity<ClienteResponse> clientesIdGet(Long id) {
-        Optional<ClienteEntity> clienteOptional = clienteRepository.findById(id);
-
-        if (clienteOptional.isEmpty()) {
-            throw new ClientesNoEncontradosException("Cliente con ID " + id + " no encontrado.");
-        }
-
-        ClienteResponse clienteResponse = mapToClienteResponse(clienteOptional.get());
-        return new ResponseEntity<>(clienteResponse, HttpStatus.OK);
+        ClienteEntity cliente = clienteRepository.findById(id)
+                .orElseThrow(() -> new ClientesNoEncontradosException("Cliente con ID " + id + " no encontrado."));
+        return new ResponseEntity<>(mapToClienteResponse(cliente), HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<Void> clientesIdDelete(Long id) {
-        Optional<ClienteEntity> clienteOptional = clienteRepository.findById(id);
+        clienteRepository.findById(id)
+                .orElseThrow(() -> new ClientesNoEncontradosException("Cliente con ID " + id + " no encontrado."));
 
-        if (clienteOptional.isEmpty()) {
-            throw new ClientesNoEncontradosException("Cliente con ID " + id + " no encontrado.");
-        }
+        // Usa el cliente generado de account.
+        // Si te da "cannot find symbol", abre CuentasApi.java en target y usa el nombre real (a veces termina en UsingGET).
+        List<CuentaResponse> cuentas = cuentasApi.cuentasClienteClienteIdGet(id);
 
-        // ✅ Usa el cliente generado de account (operationId: listarCuentasPorCliente)
-        // Si el método se generó con otro nombre (p.ej. listarCuentasPorClienteUsingGET),
-        // abre CuentasApi en target/generated-sources/account-client y usa ese nombre.
-        List<CuentaResponse> cuentas = cuentasApi.listarCuentasPorCliente(id);
-
-        boolean tieneCuentasActivas = cuentas != null && !cuentas.isEmpty();
-        if (tieneCuentasActivas) {
+        if (cuentas != null && !cuentas.isEmpty()) {
             throw new ClienteConCuentasActivasException(
-                    "El cliente con ID " + id + " no puede ser eliminado porque tiene cuentas activas."
-            );
+                    "El cliente con ID " + id + " no puede ser eliminado porque tiene cuentas activas.");
         }
 
         clienteRepository.deleteById(id);
@@ -116,19 +92,12 @@ public class ClientesApiDelegateImpl implements ClientesApiDelegate {
     public ResponseEntity<ClienteResponse> clientesIdPut(Long id, ClienteRequest clienteRequest) {
         validarClienteRequest(clienteRequest);
 
-        Optional<ClienteEntity> clienteOptional = clienteRepository.findById(id);
-        if (clienteOptional.isEmpty()) {
-            throw new ClientesNoEncontradosException("Cliente con ID " + id + " no encontrado.");
-        }
+        ClienteEntity clienteExistente = clienteRepository.findById(id)
+                .orElseThrow(() -> new ClientesNoEncontradosException("Cliente con ID " + id + " no encontrado."));
 
-        ClienteEntity clienteExistente = clienteOptional.get();
-
-        if (!clienteExistente.getDni().equals(clienteRequest.getDni())) {
-            if (clienteRepository.findByDni(clienteRequest.getDni()).isPresent()) {
-                throw new ClienteDuplicadoException(
-                        "El DNI " + clienteRequest.getDni() + " ya está registrado en otro cliente."
-                );
-            }
+        if (!clienteExistente.getDni().equals(clienteRequest.getDni())
+                && clienteRepository.findByDni(clienteRequest.getDni()).isPresent()) {
+            throw new ClienteDuplicadoException("El DNI " + clienteRequest.getDni() + " ya está registrado en otro cliente.");
         }
 
         clienteExistente.setNombre(clienteRequest.getNombre());
@@ -136,49 +105,39 @@ public class ClientesApiDelegateImpl implements ClientesApiDelegate {
         clienteExistente.setDni(clienteRequest.getDni());
         clienteExistente.setEmail(clienteRequest.getEmail());
 
-        ClienteEntity clienteActualizado = clienteRepository.save(clienteExistente);
-        ClienteResponse clienteResponse = mapToClienteResponse(clienteActualizado);
-
-        return new ResponseEntity<>(clienteResponse, HttpStatus.OK);
+        ClienteEntity actualizado = clienteRepository.save(clienteExistente);
+        return new ResponseEntity<>(mapToClienteResponse(actualizado), HttpStatus.OK);
     }
 
     private void validarClienteRequest(ClienteRequest request) {
-        if (request.getNombre() == null || request.getNombre().trim().isEmpty()) {
+        if (request.getNombre() == null || request.getNombre().trim().isEmpty())
             throw new ValidacionException("El nombre es requerido");
-        }
-        if (request.getApellido() == null || request.getApellido().trim().isEmpty()) {
+        if (request.getApellido() == null || request.getApellido().trim().isEmpty())
             throw new ValidacionException("El apellido es requerido");
-        }
-        if (request.getDni() == null || request.getDni().trim().isEmpty()) {
+        if (request.getDni() == null || request.getDni().trim().isEmpty())
             throw new ValidacionException("El DNI es requerido");
+        if (request.getEmail() != null && !request.getEmail().trim().isEmpty()
+                && !request.getEmail().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
+            throw new ValidacionException("El formato del email es inválido");
         }
-        if (request.getEmail() != null && !request.getEmail().trim().isEmpty()) {
-            if (!isEmailValido(request.getEmail())) {
-                throw new ValidacionException("El formato del email es inválido");
-            }
-        }
-    }
-
-    private boolean isEmailValido(String email) {
-        return email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$");
     }
 
     private ClienteEntity mapToClienteEntity(ClienteRequest request) {
-        ClienteEntity entity = new ClienteEntity();
-        entity.setNombre(request.getNombre());
-        entity.setApellido(request.getApellido());
-        entity.setDni(request.getDni());
-        entity.setEmail(request.getEmail());
-        return entity;
+        ClienteEntity e = new ClienteEntity();
+        e.setNombre(request.getNombre());
+        e.setApellido(request.getApellido());
+        e.setDni(request.getDni());
+        e.setEmail(request.getEmail());
+        return e;
     }
 
-    private ClienteResponse mapToClienteResponse(ClienteEntity cliente) {
-        ClienteResponse response = new ClienteResponse();
-        response.setId(cliente.getId());
-        response.setDni(cliente.getDni());
-        response.setNombre(cliente.getNombre());
-        response.setApellido(cliente.getApellido());
-        response.setEmail(cliente.getEmail());
-        return response;
+    private ClienteResponse mapToClienteResponse(ClienteEntity c) {
+        ClienteResponse r = new ClienteResponse();
+        r.setId(c.getId());
+        r.setDni(c.getDni());
+        r.setNombre(c.getNombre());
+        r.setApellido(c.getApellido());
+        r.setEmail(c.getEmail());
+        return r;
     }
 }

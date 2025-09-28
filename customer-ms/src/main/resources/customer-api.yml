@@ -6,7 +6,7 @@ servers:
   - url: http://{host}/api/v1
     variables:
       host:
-        default: localhost:8080
+        default: localhost:8082
 
 tags:
   - name: Clientes

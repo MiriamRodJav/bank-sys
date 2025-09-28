@@ -5,12 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1d4789fa-77a6-4650-ae70-fbd5a5b6a70c" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/transaction-ms/src/main/java/com/transaction_ms/transaction_ms/api/TransaccionesApiDelegateImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/account-ms/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/account-ms/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/account-ms/src/main/resources/account-api.yaml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/customer-ms/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/customer-ms/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/customer-ms/src/main/java/com/customer/customer_ms/AppConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/customer-ms/src/main/java/com/customer/customer_ms/AppConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/customer-ms/src/main/java/com/customer/customer_ms/api/ClientesApiDelegateImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/customer-ms/src/main/java/com/customer/customer_ms/api/ClientesApiDelegateImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/customer-ms/src/main/resources/customer-api.yml" beforeDir="false" afterPath="$PROJECT_DIR$/customer-ms/src/main/resources/customer-api.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/customer-ms/src/test/java/com/customer/customer_ms/CustomerMicroserviceApplicationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/customer-ms/src/test/java/com/customer/customer_ms/CustomerMicroserviceApplicationTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/transaction-ms/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/transaction-ms/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/transaction-ms/src/main/java/com/transaction_ms/transaction_ms/controller/TransaccionesController.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/transaction-ms/src/main/resources/transactions.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/transaction-ms/src/main/resources/transactions.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -46,48 +50,71 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.Main.executor": "Run",
-    "JUnit.AccountMicroserviceApplicationTests.executor": "Run",
-    "JUnit.CuentasApiDelegateImplTest.executor": "Coverage",
-    "JUnit.GlobalExceptionHandlerTest.executor": "Coverage",
-    "Maven. [clean,install].executor": "Run",
-    "Maven.account-ms [checkstyle:check].executor": "Run",
-    "Maven.account-ms [clean,install].executor": "Run",
-    "Maven.account-ms [clean,test].executor": "Run",
-    "Maven.account-ms [clean,verify].executor": "Run",
-    "Maven.customer-ms [clean,install].executor": "Run",
-    "Maven.transaction-ms [clean,install].executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "Spring Boot.TransactionMsApplication.executor": "Run",
-    "git-widget-placeholder": "entregable-final-grupo-02",
-    "junie.onboarding.icon.badge.shown": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/Workspaces/NTT/Bootcamp Java/bank-sys",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "run.configurations.included.in.services": "true",
-    "settings.editor.selected.configurable": "File.Encoding",
-    "to.speed.mode.migration.done": "true",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.AccountMicroserviceApplicationTests.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.CuentasApiDelegateImplTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.GlobalExceptionHandlerTest.executor&quot;: &quot;Coverage&quot;,
+    &quot;Maven. [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.account-ms [checkstyle:check].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.account-ms [clean,compile].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.account-ms [clean,generate-sources].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.account-ms [clean,install,-U].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.account-ms [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.account-ms [clean,test].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.account-ms [clean,verify].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.account-ms [spring-boot:run].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.customer-ms [-pl,customer-ms,clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.customer-ms [clean,compile].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.customer-ms [clean,install,-U].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.customer-ms [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.transaction-ms [-pl,transaction-ms,clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.transaction-ms [clean,compile].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.transaction-ms [clean,generate-sources].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.transaction-ms [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;Spring Boot.AccountMicroserviceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.CustomerMicroserviceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.TransactionMsApplication.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;entregable-final-grupo-02&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Juliette/Documents/CURSOS 2025/Bootcamp JAVA/TRABAJO GRUPAL/bank-sys&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;run.configurations.included.in.services&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;File.Encoding&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunAnythingCache">
     <option name="myCommands">
       <command value="mvn clean test" />
       <command value="mvn clean verify" />
       <command value="mvn checkstyle:check" />
+      <command value=" mvn -q -DskipTests clean generate-sources " />
+      <command value="mvn spring-boot:run " />
+      <command value="mvn clean generate-sources " />
+      <command value="mvn clean install -U" />
+      <command value="mvn -pl customer-ms clean  " />
+      <command value="mvn -pl transaction-ms clean" />
+      <command value="mvn clean compile" />
       <command value="mvn clean install" />
     </option>
   </component>
@@ -100,8 +127,21 @@
         <option value="SpringBootApplicationConfigurationType" />
       </set>
     </option>
+    <option name="configurationStatuses">
+      <map>
+        <entry key="SpringBootApplicationConfigurationType">
+          <value>
+            <map>
+              <entry key="AccountMicroserviceApplication" value="STOPPED" />
+              <entry key="CustomerMicroserviceApplication" value="STOPPED" />
+              <entry key="TransactionMsApplication" value="STOPPED" />
+            </map>
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
-  <component name="RunManager" selected="JUnit.CuentasApiDelegateImplTest">
+  <component name="RunManager" selected="Spring Boot.TransactionMsApplication">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="ALTERNATIVE_JRE_PATH" value="11" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
@@ -214,7 +254,9 @@
       <option name="presentableId" value="Default" />
       <updated>1756067220610</updated>
       <workItem from="1757870006884" duration="383000" />
-      <workItem from="1758679580438" duration="17831000" />
+      <workItem from="1758679580438" duration="22240000" />
+      <workItem from="1759006879070" duration="22325000" />
+      <workItem from="1759029566243" duration="896000" />
     </task>
     <servers />
   </component>

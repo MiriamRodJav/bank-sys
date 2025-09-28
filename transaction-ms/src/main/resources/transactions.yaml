@@ -7,7 +7,7 @@ servers:
   - url: http://{host}/api/v1
     variables:
       host:
-        default: localhost:8082
+        default: localhost:8083
 tags:
   - name: Transacciones
     description: Operaciones relacionadas con transacciones bancarias
