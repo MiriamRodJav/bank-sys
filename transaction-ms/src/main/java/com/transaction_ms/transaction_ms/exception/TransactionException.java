@@ -1,7 +1,6 @@
 package com.transaction_ms.transaction_ms.exception;
 
 import lombok.Data;
-import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 @Data

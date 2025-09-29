@@ -82,11 +82,6 @@ paths:
       operationId: historial
       parameters:
         - in: query
-          name: cuentaId
-          schema:
-            type: string
-          description: El ID de la cuenta para filtrar el historial de transacciones.
-        - in: query
           name: estado
           schema:
             $ref: '#/components/schemas/EstadoTransaccion'
